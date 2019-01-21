@@ -1,0 +1,13 @@
+Index: linux-3.18.23/net/bridge/br_fdb.c
+===================================================================
+--- linux-3.18.23.orig/net/bridge/br_fdb.c	2015-10-29 11:49:46.000000000 +0900
++++ linux-3.18.23/net/bridge/br_fdb.c	2015-12-08 21:29:59.523224266 +0900
+@@ -361,6 +361,8 @@
+ 
+ 	return NULL;
+ }
++EXPORT_SYMBOL(__br_fdb_get);
++
+ 
+ #if IS_ENABLED(CONFIG_ATM_LANE)
+ /* Interface used by ATM LANE hook to test

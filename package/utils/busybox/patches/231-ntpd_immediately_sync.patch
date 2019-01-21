@@ -1,0 +1,52 @@
+diff -Naur a/ntpd.c b/ntpd.c
+--- a/networking/ntpd.c	2017-04-28 11:27:48.115749038 +0800
++++ b/networking/ntpd.c	2017-04-28 11:25:28.000000000 +0800
+@@ -1060,12 +1060,13 @@
+ 		VERB4 bb_error_msg("peer %s unfit for selection: bad status/stratum", p->p_dotted);
+ 		return 0;
+ 	}
+-#endif
++
+ 	/* rd is root_distance(p) */
+ 	if (rd > MAXDIST + FREQ_TOLERANCE * (1 << G.poll_exp)) {
+ 		VERB4 bb_error_msg("peer %s unfit for selection: root distance too high", p->p_dotted);
+ 		return 0;
+ 	}
++#endif
+ //TODO
+ //	/* Do we have a loop? */
+ //	if (p->refid == p->dstaddr || p->refid == s.refid)
+@@ -1391,7 +1392,6 @@
+ 	if (abs_offset > PANIC_THRESHOLD) {
+ 		bb_error_msg_and_die("offset %f far too big, exiting", offset);
+ 	}
+-#endif
+ 
+ 	/* If this is an old update, for instance as the result
+ 	 * of a system peer change, avoid it. We never use
+@@ -1402,6 +1402,7 @@
+ 			p->p_dotted);
+ 		return 0; /* "leave poll interval as is" */
+ 	}
++#endif
+ 
+ 	/* Clock state machine transition function. This is where the
+ 	 * action is and defines how the system reacts to large time
+@@ -2286,7 +2287,7 @@
+ 		for (item = G.ntp_peers; item != NULL; item = item->link) {
+ 			peer_t *p = (peer_t *) item->data;
+ 
+-			if (p->next_action_time <= G.cur_time) {
++			if (p->next_action_time <= G.cur_time || (p->next_action_time - G.cur_time) > 60*5 ) {
+ 				if (p->p_fd == -1) {
+ 					/* Time to send new req */
+ 					if (--cnt == 0) {
+@@ -2343,6 +2344,8 @@
+ 			}
+ 			bb_error_msg("poll:%us sockets:%u interval:%us", timeout, i, 1 << G.poll_exp);
+ 		}
++
++		if (timeout > 60*2) timeout = 1;
+ 		nfds = poll(pfd, i, timeout * 1000);
+  did_poll:
+ 		gettime1900d(); /* sets G.cur_time */

@@ -1,0 +1,28 @@
+Index: linux-3.18.23/drivers/mtd/devices/m25p80.c
+===================================================================
+--- linux-3.18.23.orig/drivers/mtd/devices/m25p80.c
++++ linux-3.18.23/drivers/mtd/devices/m25p80.c
+@@ -264,6 +264,14 @@ static int m25p_remove(struct spi_device
+ {
+ 	struct m25p	*flash = spi_get_drvdata(spi);
+ 
++/* foxconn miles hsu add for 32M flash*/
++	flash->command[0] = 0xe9;  
++	spi_write(flash->spi, flash->command, 1);  
++/*	flash->command[0] = 0x66;  
++	spi_write(flash->spi, flash->command, 1);  
++	flash->command[0] = 0x99;  
++	spi_write(flash->spi, flash->command, 1);  
++*/	
+ 	/* Clean up MTD stuff. */
+ 	return mtd_device_unregister(&flash->mtd);
+ }
+@@ -327,6 +335,8 @@ static struct spi_driver m25p80_driver =
+ 	.id_table	= m25p_ids,
+ 	.probe	= m25p_probe,
+ 	.remove	= m25p_remove,
++/* foxconn miles hsu add for 32M flash*/
++	.shutdown = m25p_remove,
+ 
+ 	/* REVISIT: many of these chips have deep power-down modes, which
+ 	 * should clearly be entered on suspend() to minimize power use.

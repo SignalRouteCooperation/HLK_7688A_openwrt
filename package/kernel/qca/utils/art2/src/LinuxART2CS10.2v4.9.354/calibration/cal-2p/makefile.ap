@@ -1,0 +1,69 @@
+#ART2_ROOT=$(PWD)/..
+ART2_ROOT=../../
+
+
+OUTPUT_DIR=Linux_ar9300
+
+CC = $(TOOL_PREFIX)gcc
+LD = $(TOOL_PREFIX)gcc
+STRIP = $(TOOL_PREFIX)strip
+
+#LD	:= ld 
+#CC	:= gcc
+
+DEBUG = 1
+ifeq ($(DEBUG),1)
+    CFLAGS += -D_DEBUG -D_DEBUG_BOTH -g
+endif
+
+ifeq ($(GDB),1)
+    CFLAGS += -g
+endif
+
+CFLAGS += -Wno-pointer-arith -Wno-extra -Wno-implicit
+
+
+CFLAGS += -DDEBUG_PKTLOG -DCAL2P_EXPORTS
+
+CFLAGS += -I$(ART2_ROOT)/shared \
+
+CFLAGS += -DCAL-2PDLL
+CFLAGS += -fPIC
+
+VPATH = $(ART2_ROOT)/calibration/cal-2p \
+
+SRCS =  cal-2p.c \
+	calibration.c \
+	calibration_setup.c \
+
+OBJS    :=  $(patsubst %.c,$(OUTPUT_DIR)/%.o,$(SRCS))
+
+LDFLAGS	:= -shared
+
+
+LIB 	:= $(OUTPUT_DIR)/libcal-2p.so
+
+all: $(LIB)
+
+$(LIB): $(OUTPUT_DIR) $(OBJS) 
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+dirs:
+	mkdir -p $(OUTPUT_DIR)
+
+obj_list:
+	rm -f $(BIN) 
+	rm -f $(OUTPUT_DIR)/.obj_list
+	echo $(OUTPUT_DIR)/*.o > $(OUTPUT_DIR)/.obj_list
+
+$(OUTPUT_DIR): 
+	echo $(OUTPUT_DIR)
+	mkdir -p ./$(OUTPUT_DIR)
+	
+$(OUTPUT_DIR)/%.o : %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+clean:
+	rm -fr $(OUTPUT_DIR)
+
+

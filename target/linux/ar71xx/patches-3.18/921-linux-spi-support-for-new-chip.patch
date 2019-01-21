@@ -1,0 +1,13 @@
+diff -rupN o/drivers/mtd/spi-nor/spi-nor.c n/drivers/mtd/spi-nor/spi-nor.c
+--- o/drivers/mtd/spi-nor/spi-nor.c	2016-09-02 15:08:56.293425487 +0800
++++ n/drivers/mtd/spi-nor/spi-nor.c	2016-09-02 15:09:09.017427881 +0800
+@@ -702,6 +702,9 @@ static const struct flash_info spi_nor_i
+ 	/* GigaDevice */
+ 	{ "gd25q32", INFO(0xc84016, 0, 64 * 1024,  64, SECT_4K) },
+ 	{ "gd25q64", INFO(0xc84017, 0, 64 * 1024, 128, SECT_4K) },
++	/* gukq@kunteng.org add for ap143-qca9531-9582 and kt9672sc m25p80 support */
++	{ "gd25q128", INFO(0xc84018, 0, 64 * 1024, 256, SECT_4K) },
++	/* gukq add over */
+ 
+ 	/* Intel/Numonyx -- xxxs33b */
+ 	{ "160s33b",  INFO(0x898911, 0, 64 * 1024,  32, 0) },

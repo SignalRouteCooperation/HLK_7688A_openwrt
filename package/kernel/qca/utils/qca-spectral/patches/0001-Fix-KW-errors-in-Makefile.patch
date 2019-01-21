@@ -1,0 +1,64 @@
+diff --git a/Makefile b/Makefile
+index 44ab72b..495ffc5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,6 +14,9 @@ endif
+ # Important note: Values of CC, AR and LD should be passed to this script.
+ 
+ # Path defines...
++
++ifndef QSDK_SPECTRAL
++
+ SPECTRAL_DRIVER_PATH	:= $(ATHEROSPATH)/lmac/spectral
+ ADF_INC					:= ${ATHEROSPATH}/adf/include
+ ADF_OS_INC				:= ${ATHEROSPATH}/adf/include/os
+@@ -21,10 +24,7 @@ ASF_INC					:= ${ATHEROSPATH}/asf/include
+ ATH_DEV_INC				:= ${ATHEROSPATH}/lmac/ath_dev
+ ATH_DFS_INC				:= ${ATHEROSPATH}/lmac/dfs
+ UMAC_INC				:= ${ATHEROSPATH}/umac/include
+-COMMON_INC				:= ./common
+ HAL_INC					:= ${ATHEROSPATH}/hal
+-CLASSIFIER_SRC			:= ./common
+-CLASSIFIER_INC			:= ./common
+ BINDIR					= /usr/local/bin
+ DEPTH					:= ../../drivers/wlan
+ TOOLS_HEADER_INC_PATH	:= ../../drivers/wlan_modules/os/linux/include
+@@ -32,6 +32,11 @@ WLAN_INC_PATH			:= ../../drivers/wlan_modules/include
+ OL_WLAN_INC_PATH	    := $(ATHEROSPATH)/include/
+ OL_WLAN_HINC_PATH	    := $(ATHEROSPATH)/offload/include/
+ 
++endif
++
++COMMON_INC				:= ./common
++CLASSIFIER_SRC			:= ./common
++CLASSIFIER_INC			:= ./common
+ 
+ # Spectral
+ ifeq ($(strip ${ATH_SUPPORT_SPECTRAL}),1)
+@@ -43,16 +48,26 @@ endif
+ ifeq ($(strip ${ATH_SUPPORT_ICM}),1)
+ ALL+= icm
+ SPECTRAL_TOOLS+= icm
++
++ifndef QSDK_SPECTRAL
+ INCS+=-I${COMMON}/dfs -I${COMMON} -I${COMMON}/spectral
+ endif
+ 
++endif
++
+ all: ${ALL}
+ 
+ # Add necessary include path
++
++ifndef QSDK_SPECTRAL
+ INCS+= -I$(ATHEROSPATH) -I${HAL}/${OS} -I${HAL_INC} -I${COMMON_INC}
+ INCS+= -I${CLASSIFIER_INC} -I${ADF_INC} -I${ADF_OS_INC} -I${ASF_INC}
+ INCS+= -I${SPECTRAL_DRIVER_PATH} -I${ATH_DEV_INC} -I${ATH_DFS_INC} -I.
+ INCS+= -I${TOOLS_HEADER_INC_PATH} -I${WLAN_INC_PATH} -I${OL_WLAN_INC_PATH} -I${OL_WLAN_HINC_PATH}
++else
++INCS+= -I$(ATHEROSPATH) -I${COMMON_INC} -I.
++endif
++
+ 
+ # Update CFLAGS
+ CFLAGS= ${INCS} ${COPTS} -Wall

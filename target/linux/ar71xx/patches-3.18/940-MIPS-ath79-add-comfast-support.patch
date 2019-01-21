@@ -1,0 +1,105 @@
+diff -urN a/arch/mips/ath79/machtypes.h b/arch/mips/ath79/machtypes.h
+--- a/arch/mips/ath79/machtypes.h	2016-05-11 18:14:53.869056973 +0800
++++ b/arch/mips/ath79/machtypes.h	2016-05-11 18:15:19.713050408 +0800
+@@ -40,6 +40,19 @@
+ 	ATH79_MACH_BSB,			/* Smart Electronics Black Swift board */
+ 	ATH79_MACH_CAP4200AG,		/* Senao CAP4200AG */
+ 	ATH79_MACH_CARAMBOLA2,		/* 8devices Carambola2 */
++	ATH79_MACH_COMFAST_AP9341FE,	/* COMFAST AP9341FE */
++	ATH79_MACH_COMFAST_CF_E316NV2,	/* COMFAST CF-E316NV2 */
++	ATH79_MACH_COMFAST_CF_E325N,	/* COMFAST CF-E325N */
++	ATH79_MACH_KUNTENG_KT9671,	/* COMFAST CF-E350N gukq renamed it KT9671 20160527*/
++	ATH79_MACH_KUNTENG_KT9672,	/* COMFAST CF-E355AC gukq renamed it KT9672 20160627*/
++	ATH79_MACH_COMFAST_CF_E380AC,	/* COMFAST CF-E380AC */
++	ATH79_MACH_COMFAST_CF_E520N,	/* COMFAST CF-E520N */
++	ATH79_MACH_COMFAST_CF_E530N,	/* COMFAST CF-E530N */
++	ATH79_MACH_COMFAST_CF_WR600N,	/* COMFAST CF-WR600N */
++	ATH79_MACH_COMFAST_CF_WR605N,	/* COMFAST CF-WR605N */
++	ATH79_MACH_COMFAST_CF_WR610N,	/* COMFAST CF-WR610N */
++	ATH79_MACH_COMFAST_CF_WR615N,	/* COMFAST CF-WR615N */
++	ATH79_MACH_COMFAST_CF_WR650AC,	/* COMFAST CF-WR650AC */
+ 	ATH79_MACH_CPE510,		/* TP-LINK CPE510 */
+ 	ATH79_MACH_DB120,		/* Atheros DB120 reference board */
+ 	ATH79_MACH_PB44,		/* Atheros PB44 reference board */
+ };
+ 
+ #endif /* _ATH79_MACHTYPE_H */
+diff -urN a/arch/mips/ath79/Kconfig b/arch/mips/ath79/Kconfig
+--- a/arch/mips/ath79/Kconfig	2016-05-12 09:50:57.360929635 +0800
++++ b/arch/mips/ath79/Kconfig	2016-05-12 09:49:58.149066746 +0800
+@@ -155,6 +155,60 @@
+ 	select ATH79_DEV_M25P80
+ 	select ATH79_DEV_USB
+ 
++config ATH79_MACH_COMFAST
++	bool "COMFAST reference board"
++	select SOC_AR934X
++	select ATH79_DEV_AP9X_PCI if PCI
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_NFC
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  Comfast reference board.
++
++config ATH79_MACH_KUNTENG_KT9671
++       bool "COMFAST CF-E325N support"
++       select SOC_QCA953X
++       select ATH79_DEV_ETH
++       select ATH79_DEV_GPIO_BUTTONS
++       select ATH79_DEV_LEDS_GPIO
++       select ATH79_DEV_M25P80
++       select ATH79_DEV_WMAC
++
++config ATH79_MACH_KUNTENG_KT9672
++	bool "COMFAST KT9672 board support"
++	select SOC_QCA953X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_COMFAST_CF_E380AC
++	bool "COMFAST CF-E380AC board support"
++	select SOC_QCA955X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_COMFAST_CF_WR650AC
++	bool "COMFAST CF-WR650AC board support"
++	select SOC_QCA955X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
+ config ATH79_MACH_DB120
+ 	bool "Atheros DB120 reference board"
+ 	select SOC_AR934X
+diff -urN a/arch/mips/ath79/Makefile b/arch/mips/ath79/Makefile
+--- a/arch/mips/ath79/Makefile	2016-05-12 10:01:15.487586393 +0800
++++ b/arch/mips/ath79/Makefile	2016-05-12 10:01:03.755610919 +0800
+@@ -56,6 +56,11 @@
+ obj-$(CONFIG_ATH79_MACH_BHU_BXU2000N2_A)+= mach-bhu-bxu2000n2-a.o
+ obj-$(CONFIG_ATH79_MACH_BSB)		+= mach-bsb.o
+ obj-$(CONFIG_ATH79_MACH_CAP4200AG)	+= mach-cap4200ag.o
++obj-$(CONFIG_ATH79_MACH_COMFAST)	+= mach-comfast.o
++obj-$(CONFIG_ATH79_MACH_KUNTENG_KT9672)	+= mach-comfast.o
++obj-$(CONFIG_ATH79_MACH_COMFAST_CF_E380AC)	+= mach-comfast.o
++obj-$(CONFIG_ATH79_MACH_COMFAST_CF_WR650AC)	+= mach-comfast.o
++obj-$(CONFIG_ATH79_MACH_KUNTENG_KT9671)	+= mach-comfast.o
+ obj-$(CONFIG_ATH79_MACH_CPE510)		+= mach-cpe510.o
+ obj-$(CONFIG_ATH79_MACH_DB120)		+= mach-db120.o
+ obj-$(CONFIG_ATH79_MACH_DLAN_PRO_500_WP)	+= mach-dlan-pro-500-wp.o

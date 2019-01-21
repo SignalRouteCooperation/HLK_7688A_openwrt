@@ -1,0 +1,29 @@
+--- a/drivers/net/ethernet/ralink/gsw_mt7620a.c
++++ b/drivers/net/ethernet/ralink/gsw_mt7620a.c
+@@ -328,6 +328,8 @@ static irqreturn_t gsw_interrupt_mt7621(
+ 	struct fe_priv *priv = (struct fe_priv *) _priv;
+ 	struct mt7620_gsw *gsw = (struct mt7620_gsw *) priv->soc->swpriv;
+ 	u32 reg, i;
++	char port_num[32];
++	char *envp[] = {port_num, NULL};
+ 
+ 	reg = mt7530_mdio_r32(gsw, 0x700c);
+ 
+@@ -338,9 +340,17 @@ static irqreturn_t gsw_interrupt_mt7621(
+ 			if (link != priv->link[i]) {
+ 				priv->link[i] = link;
+ 				if (link)
++                                {
+ 					netdev_info(priv->netdev, "port %d link up\n", i);
++                                        snprintf(port_num, sizeof(port_num), "PORT_ID=%d", i);
++                                        kobject_uevent_env(&priv->netdev->dev.kobj, KOBJ_ONLINE, envp);
++                                }
+ 				else
++                                {
+ 					netdev_info(priv->netdev, "port %d link down\n", i);
++                                        snprintf(port_num, sizeof(port_num), "PORT_ID=%d", i);
++                                        kobject_uevent_env(&priv->netdev->dev.kobj, KOBJ_OFFLINE, envp);
++                                }
+ 			}
+ 		}
+ 

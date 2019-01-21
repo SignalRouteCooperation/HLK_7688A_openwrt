@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+START=10
+EXTRA_COMMANDS="state"
+
+WMAC_BIN=/usr/bin/wmac_mib_to_art
+BOARD_NAME=`cat /tmp/sysinfo/board_name`
+
+start() {
+	echo "do nothing"
+#	if [ "$BOARD_NAME"x == "kf2010"x ]; then 
+#		$WMAC_BIN
+#	fi
+}
+
+stop() {
+#	if [ "$BOARD_NAME"x == "kf2010"x ]; then 
+#		$WMAC_BIN
+#	fi
+	echo "do nothing"
+}
+
+

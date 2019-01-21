@@ -1,0 +1,3186 @@
+=============================================================================
+This Notice.txt file contains certain notices of software components included with the software that Qualcomm Atheros, Inc. (“Qualcomm Atheros”) is required to provide you. Notwithstanding anything in the notices in this file, your use of these software components together with the Qualcomm Atheros software (Qualcomm Atheros software hereinafter referred to as “Software”) is subject to the terms of your license from Qualcomm Atheros. Compliance with all copyright laws and software license agreements included in the notice section of this file are the responsibility of the user. Except as may be granted by separate express written agreement, this file provides no license to any Qualcomm Atheros patents, trademarks, copyrights, or other intellectual property.
+Copyright (c) 2013 Qualcomm Atheros, Inc. All rights reserved. 
+Qualcomm is a trademark of Qualcomm Incorporated, registered in the United States and other countries. All Qualcomm Incorporated trademarks are used with permission. Atheros is a trademark of Qualcomm Atheros, Inc., registered in the United States and other countries. Other products and brand names may be trademarks or registered trademarks of their respective owners. 
+
+
+NOTICES:
+=============================================================================
+
+Qualcomm Atheros, Inc. has chosen to take athr-hostap subject to the BSD license and terms.
+
+
+wpa_supplicant and hostapd
+--------------------------
+
+Copyright (c) 2002-2012, Jouni Malinen <j@w1.fi> and contributors
+All Rights Reserved.
+
+These programs are licensed under the BSD license (the one with
+advertisement clause removed).
+
+If you are submitting changes to the project, please see CONTRIBUTIONS
+file for more instructions.
+
+
+This package may include either wpa_supplicant, hostapd, or both. See
+README file respective subdirectories (wpa_supplicant/README or
+hostapd/README) for more details.
+
+Source code files were moved around in v0.6.x releases and compared to
+earlier releases, the programs are now built by first going to a
+subdirectory (wpa_supplicant or hostapd) and creating build
+configuration (.config) and running 'make' there (for Linux/BSD/cygwin
+builds).
+
+
+License
+-------
+
+This software may be distributed, used, and modified under the terms of
+BSD license:
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+3. Neither the name(s) of the above-listed copyright holder(s) nor the
+   names of its contributors may be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+/*
+ * Android driver interface
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / IEEE 802.11 Management: Beacon and Probe Request/Response
+ * Copyright (c) 2002-2004, Instant802 Networks, Inc.
+ * Copyright (c) 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2008-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / IEEE 802.11 Management: Beacon and Probe Request/Response
+ * Copyright (c) 2002-2004, Instant802 Networks, Inc.
+ * Copyright (c) 2005-2006, Devicescape Software, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / Hardware feature query and different modes
+ * Copyright 2002-2003, Instant802 Networks, Inc.
+ * Copyright 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2008-2012, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / Hardware feature query and different modes
+ * Copyright 2002-2003, Instant802 Networks, Inc.
+ * Copyright 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2008-2011, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / IEEE 802.11n HT
+ * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2007-2008, Intel Corporation 
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / VLAN initialization
+ * Copyright 2003, Instant802 Networks, Inc.
+ * Copyright 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / VLAN initialization
+ * Copyright 2003, Instant802 Networks, Inc.
+ * Copyright 2005, Devicescape Software, Inc. 
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / WMM (Wi-Fi Multimedia)
+ * Copyright 2002-2003, Instant802 Networks, Inc.
+ * Copyright 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / WMM (Wi-Fi Multimedia)
+ * Copyright 2002-2003, Instant802 Networks, Inc.
+ * Copyright 2005-2006, Devicescape Software, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * hostapd / Driver interaction with Atheros driver
+ * Copyright (c) 2004, Sam Leffler <sam@errno.com>
+ * Copyright (c) 2004, Video54 Technologies
+ * Copyright (c) 2005-2007, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2009, Atheros Communications
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * Wired Ethernet driver interface
+ * Copyright (c) 2005-2009, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2004, Gunter Burchardt <tira@isx.de>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant - driver interaction with BSD net80211 layer
+ * Copyright (c) 2004, Sam Leffler <sam@errno.com>
+ * Copyright (c) 2004, 2Wire, Inc
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ *
+ */
+
+/*
+ * WPA Supplicant - driver interaction with MADWIFI 802.11 driver
+ * Copyright (c) 2004, Sam Leffler <sam@errno.com>
+ * Copyright (c) 2004, Video54 Technologies
+ * Copyright (c) 2004-2007, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ *
+ * While this driver wrapper supports both AP (hostapd) and station
+ * (wpa_supplicant) operations, the station side is deprecated and
+ * driver_wext.c should be used instead. This driver wrapper should only be
+ * used with hostapd for AP mode functionality.
+ */
+
+/*
+ * WPA Supplicant - roboswitch driver interface
+ * Copyright (c) 2008-2009 Jouke Witteveen
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with FreeBSD
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2005, Sam Leffler <sam@errno.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_supplicant D-Bus control interface - common functionality
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_supplicant D-Bus control interface - common definitions
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_supplicant D-Bus control interface - internal definitions
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009-2010, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009-2010, Witold Sowa <witold.sowa@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009-2010, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009-2010, Witold Sowa <witold.sowa@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface (WPS)
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface 
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface 
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_supplicant - D-Bus introspection
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (c) 2009, Witold Sowa <witold.sowa@gmail.com>
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface (WPS)
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ * 
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ * 
+ * See README and COPYING for more details.
+ * 
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_gui - SignalBar class
+ * Copyright (c) 2011, Kel Modderman <kel@otaku42.de>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+# Logwatch configuration for hostapd
+#
+# Copyright 2005 Henrik Brix Andersen <brix@gentoo.org>
+# Distributed under the terms of the GNU General Public License v2
+# Alternatively, this file may be distributed under the terms of the BSD License
+#
+# Qualcomm Atheros, Inc. chooses to take this file subject only to the
+# terms of the BSD license.
+
+
+/*
+ * Radiotap parser
+ *
+ * Copyright 2007               Andy Green <andy@warmcat.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ *
+ * Modified for userspace by Johannes Berg <johannes@sipsolutions.net>
+ * I only modified some things on top to ease syncing should bugs be found.
+ */
+
+/*
+ * Received frame processing
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received Data frame processing
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received Data frame processing for EAPOL messages
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received Data frame processing for IPv4 packets
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received Management frame processing
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received Data frame processing for TDLS packets
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Received frame processing for wired interface
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RSN pre-authentication (supplicant)
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RSA
+ * Copyright (c) 2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA1 hash implementation and interface functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA1 hash implementation and interface functions
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA1-based key derivation function (PBKDF2) for IEEE 802.11i
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA1 T-PRF for EAP-FAST
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA-256 hash implementation and interface functions
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA256 hash implementation and interface functions
+ * Copyright (c) 2003-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA-256 hash implementation and interface functions
+ * Copyright (c) 2003-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface definition
+ * Copyright (c) 2004-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface functions for GnuTLS
+ * Copyright (c) 2004-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface functions for no TLS case
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface functions for NSS
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface functions for OpenSSL
+ * Copyright (c) 2004-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SSL/TLS interface functions for Microsoft Schannel
+ * Copyright (c) 2005-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * STA list
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Testing driver interface for a simulated network driver
+ * Copyright (c) 2004-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for AES
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Testing tool for ASN.1 routines
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Testing tool for TLSv1 client routines using HTTPS
+ * Copyright (c) 2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for MD4 (test vectors from RFC 1320)
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for MD5 (test vectors from RFC 1321)
+ * Copyright (c) 2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for ms_funcs
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for RC4
+ * Copyright (c) 2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for SHA1 and MD5
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for SHA256
+ * Copyright (c) 2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Testing tool for X.509v3 routines
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Testing tool for X.509v3 routines
+ * Copyright (c) 2006-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Temporal Key Integrity Protocol (CCMP)
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for EAP-SIM PRF
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Test program for combined WPA authenticator/supplicant
+ * Copyright (c) 2006-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * This code implements the MD5 message-digest algorithm.
+ * The algorithm is due to Ron Rivest.  This code was
+ * written by Colin Plumb in 1993, no copyright is claimed.
+ * This code is in the public domain; do with it what you wish.
+ *
+ * Equivalent code is available from RSA Data Security, Inc.
+ * This code has been tested against that, and is equivalent,
+ * except that you don't need to include two pages of legalese
+ * with every copy.
+ *
+ * To compute the message digest of a chunk of bytes, declare an
+ * MD5Context structure, pass it to MD5Init, call MD5Update as
+ * needed on buffers full of bytes, and then call MD5Final, which
+ * will fill a supplied 16-byte array with the digest.
+ */
+
+/*
+ * TLS PRF (SHA1 + MD5)
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLS PRF P_SHA256
+ * Copyright (c) 2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLS interface functions and an internal TLS implementation
+ * Copyright (c) 2004-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file interface functions for hostapd/wpa_supplicant to use the
+ * integrated TLSv1 implementation.
+ */
+
+/*
+ * TLS v1.0/v1.1/v1.2 client (RFC 2246, RFC 4346, RFC 5246)
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 client - internal structures
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 client - read handshake message
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 client - write handshake message
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 common routines
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 common definitions
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 credentials
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 credentials
+ * Copyright (c) 2006-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 Record Protocol
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLS v1.0/v1.1/v1.2 server (RFC 2246, RFC 4346, RFC 5246)
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 server - internal structures
+ * Copyright (c) 2006-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 server - read handshake message
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * TLSv1 server - write handshake message
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * UFD routines for Wi-Fi Protected Setup
+ * Copyright (c) 2009-2012, Masashi Honma <masashi.honma@gmail.com>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * UMTS AKA - Milenage algorithm (3GPP TS 35.205, .206, .207, .208)
+ * Copyright (c) 2006-2007 <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Universally Unique IDentifier (UUID)
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * UPnP XML helper routines
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * UPnP WPS Device
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * UPnP WPS Device - Event processing
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * UPnP for WPS / internal definitions
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * UPnP SSDP for WPS
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * UPnP WPS Device - Web connections
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+/*
+ * Wi-Fi Protected Setup
+ * Copyright (c) 2007-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - attribute building
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - attribute parsing
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - attribute processing
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - common functionality
+ * Copyright (c) 2008-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - message definitions
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - device attributes
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - Enrollee
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - External Registrar
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - External Registrar (SSDP)
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - internal definitions
+ * Copyright (c) 2008-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - Registrar
+ * Copyright (c) 2008-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Wi-Fi Protected Setup - UPnP AP functionality
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * Wired Equivalent Privacy (WEP)
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * win_if_list - Display network interfaces with description (for Windows)
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This small tool is for the Windows build to provide an easy way of fetching
+ * a list of available network interfaces.
+ */
+
+/*
+ * wlantest control interface
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wlantest frame injection
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wlantest - IEEE 802.11 protocol monitoring and testing tool
+ * Copyright (c) 2010-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wlantest - IEEE 802.11 protocol monitoring and testing tool
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wlantest controller
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Common definitions
+ * Copyright (c) 2004-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - privilege separation commands
+ * Copyright (c) 2007-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA/RSN - Shared functions for supplicant and authenticator
+ * Copyright (c) 2002-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA definitions shared between hostapd and wpa_supplicant
+ * Copyright (c) 2002-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant/hostapd control interface library
+ * Copyright (c) 2004-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant/hostapd control interface library
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / wrapper functions for crypto libraries
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details."
+
+/*
+ * WPA Supplicant / wrapper functions for libgcrypt
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Crypto wrapper for LibTomCrypt (for internal TLSv1)
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / wrapper functions for libcrypto
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / shared MSCHAPV2 helper functions / RFC 2433 / RFC 2759
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Windows/NDIS driver interface
+ * Copyright (c) 2004-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Windows/NDIS driver interface
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Windows/NDIS driver interface - event processing
+ * Copyright (c) 2004-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - privilege separated driver interface
+ * Copyright (c) 2007-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - driver_wext exported functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - Private copy of Linux netlink/rtnetlink definitions.
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet interface definition
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file defines an interface for layer 2 (link layer) packet sending and
+ * receiving. l2_packet_linux.c is one implementation for such a layer 2
+ * implementation using Linux packet sockets and l2_packet_pcap.c another one
+ * using libpcap and libdnet. When porting %wpa_supplicant to other operating
+ * systems, a new l2_packet implementation may need to be added.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with Linux packet sockets
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with Microsoft NDISUIO
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * WPA Supplicant - Layer2 packet handling example with dummy functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file can be used as a starting point for layer2 packet implementation.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with libpcap/libdnet and WinPcap
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with privilege separation
+ * Copyright (c) 2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Layer2 packet handling with WinPcap RX thread
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * WPA Supplicant - PeerKey for Direct Link Setup (DLS)
+ * Copyright (c) 2006-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - RSN PMKSA cache
+ * Copyright (c) 2004-2009, 2011-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - WPA2/RSN PMKSA cache functions
+ * Copyright (c) 2003-2009, 2011-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - WPA2/RSN pre-authentication functions
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * WPA Supplicant - WPA state machine and EAPOL-Key processing
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - WPA definitions
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - IEEE 802.11r - Fast BSS Transition
+ * Copyright (c) 2006-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - WPA/RSN IE and KDE processing
+ * Copyright (c) 2003-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - WPA/RSN IE and KDE definitions
+ * Copyright (c) 2004-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant/hostapd - Build time configuration defines
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This header file can be used to define configuration defines that were
+ * originally defined in Makefile. This is mainly meant for IDE use or for
+ * systems that do not have suitable 'make' tool. In these cases, it may be
+ * easier to have a single place for defining all the needed C pre-processor
+ * defines.
+ */
+
+/*
+ * wpa_supplicant/hostapd / common helper functions, etc.
+ * Copyright (c) 2002-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant/hostapd - Default include files
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This header file is included into all C files so that commonly used header
+ * files can be selected with OS specific ifdef blocks in one place instead of
+ * having to have OS/C library specific selection in many files.
+ */
+
+/*
+ * wpa_supplicant/hostapd / Internal implementation of OS specific functions
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file is an example of operating system specific  wrapper functions.
+ * This version implements many of the functions internally, so it can be used
+ * to fill in missing functions from the target system C libraries.
+ *
+ * Some of the functions are using standard C library calls in order to keep
+ * this file in working condition to allow the functions to be tested on a
+ * Linux target. Please note that OS_NO_C_LIB_DEFINES needs to be defined for
+ * this file to work correctly. Note that these implementations are only
+ * examples and are not optimized for speed.
+ */
+
+/*
+ * wpa_supplicant/hostapd / Empty OS specific functions
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * wpa_supplicant/hostapd / OS specific functions for Win32 systems
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / PC/SC smartcard interface for USIM, GSM SIM
+ * Copyright (c) 2004-2007, 2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file implements wrapper functions for accessing GSM SIM and 3GPP USIM
+ * cards through PC/SC smartcard library. These functions are used to implement
+ * authentication routines for EAP-SIM and EAP-AKA.
+ */
+
+/*
+ * WPA Supplicant / PC/SC smartcard interface for USIM, GSM SIM
+ * Copyright (c) 2004-2006, 2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant/hostapd - State machine definitions
+ * Copyright (c) 2002-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details."
+
+/*
+ * wpa_supplicant/hostapd / Debug prints
+ * Copyright (c) 2002-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * WPA Supplicant - background scan and roaming interface
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - background scan and roaming module: learn
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - background scan and roaming module: simple
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - Temporary BSSID blacklist
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Configuration parser and common functions
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Configuration file structures
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Configuration backend: text file
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file implements a configuration backend for text files. All the
+ * configuration information is stored in a text file that uses a format
+ * described in the sample configuration file, wpa_supplicant.conf.
+ */
+
+/*
+ * WPA Supplicant / Configuration backend: empty starting point
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * WPA Supplicant / Configuration backend: Windows registry
+ * Copyright (c) 2003-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * WPA Supplicant / Control interface (shared code for all backends)
+ * Copyright (c) 2004-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface (P2P)
+ * Copyright (c) 2011-2012, Intel Corporation
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface for p2p
+ * Copyright (c) 2011-2012, Intel Corporation
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / dbus-based control interface
+ * Copyright (c) 2006, Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * Qualcomm Atheros, Inc. chooses to take this file subject only to the
+ * terms of the BSD license.
+ */
+
+/*
+ * wpa_supplicant - Internal driver interface wrappers
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - test code
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * IEEE 802.1X Supplicant test code (to be used in place of wpa_supplicant.c.
+ * Not used in production version.
+ */
+
+/*
+ * WPA Supplicant - Driver event processing
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - IBSS RSN
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / main() function for UNIX like OSes and MinGW
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Example program entrypoint
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / WinMain() function for Windows-based applications
+ * Copyright (c) 2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / main() function for Win32 service
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *"
+
+/*
+ * wpa_supplicant - Event notifications
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - test code for pre-authentication
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * IEEE 802.1X Supplicant test code (to be used in place of wpa_supplicant.c.
+ * Not used in production version.
+ */
+
+/*
+ * WPA Supplicant - Scanning
+ * Copyright (c) 2003-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - SME
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - command line interface for wpa_supplicant daemon
+ * Copyright (c) 2004-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - AddInterface class
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - EventHistory class
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - Application startup
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - NetworkConfig class
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * wpa_gui - ScanResults class
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - UserDataRequest class
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - WpaGui class
+ * Copyright (c) 2005-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - WpaGui class
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_gui - WpaMsg class for storing event messages
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - ASCII passphrase to WPA PSK tool
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / privileged helper program
+ * Copyright (c) 2007-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant
+ * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ *
+ * This file implements functions for registering and unregistering
+ * %wpa_supplicant interfaces. In addition, this file contains number of
+ * functions for managing network connections.
+ */
+
+/*
+ * wpa_supplicant - Internal definitions
+ * Copyright (c) 2003-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant - Glue code to setup EAPOL and RSN modules
+ * Copyright (c) 2003-2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant / WPS integration
+ * Copyright (c) 2008-2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant / WPS integration
+ * Copyright (c) 2008-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * X.509v3 certificate parsing and processing (RFC 3280 profile)
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * X.509v3 certificate parsing and processing
+ * Copyright (c) 2006-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * Host AP crypt: host-based CCMP encryption implementation for Host AP driver
+ *
+ * Copyright (c) 2003-2004, Jouni Malinen <jkmaline@cc.hut.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation. See README and COPYING for
+ * more details.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ */
+  /*
+ *QCA chooses to take this file subject to the terms of the BSD license.
+ */
+
+
+/*
+ * Host AP crypt: host-based TKIP encryption implementation for Host AP driver
+ *
+ * Copyright (c) 2003-2004, Jouni Malinen <jkmaline@cc.hut.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation. See README and COPYING for
+ * more details.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ */
+  /*
+ *QCA chooses to take this file subject to the terms of the BSD license.
+ */
+ 
+/*
+ * hostapd / Configuration file parser
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * hostapd / State dump
+ * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * hostapd / TKIP countermeasures
+ * Copyright (c) 2002-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * hostapd / WPA authenticator glue code
+ * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * WPA Supplicant / Empty template functions for crypto wrapper
+ * Copyright (c) 2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * FIPS 186-2 PRF for Microsoft CryptoAPI
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * FIPS 186-2 PRF for libgcrypt
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * FIPS 186-2 PRF for NSS
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * MD5 hash implementation and interface functions
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * MD5 internal definitions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RC4 stream cipher
+ * Copyright (c) 2002-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA1 internal definitions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * SHA-256 internal definitions
+ * Copyright (c) 2003-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Linux rfkill helper functions for driver wrappers
+ * Copyright (c) 2010, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RADIUS Dynamic Authorization Server (DAS) (RFC 5176)
+ * Copyright (c) 2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RADIUS Dynamic Authorization Server (DAS)
+ * Copyright (c) 2012, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * PKCS #1 (RSA Encryption)
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * PKCS #5 (Password-based Encryption)
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * PKCS #8 (Private-key information syntax)
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * RSA
+ * Copyright (c) 2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Universally Unique IDentifier (UUID)
+ * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * NFC routines for Wi-Fi Protected Setup
+ * Copyright (c) 2009-2012, Masashi Honma <masashi.honma@gmail.com>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * NFC PN531 routines for Wi-Fi Protected Setup
+ * Copyright (c) 2009-2012, Masashi Honma <masashi.honma@gmail.com>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * wpa_supplicant - Temporary BSSID blacklist
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * EAP method registration
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Authentication server setup
+ * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Control interface for shared AP commands
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * AES functions
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Crypto wrapper functions for NSS
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * DES and 3DES-EDE ciphers
+ * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Diffie-Hellman group 5 operations
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Diffie-Hellman groups
+ * Copyright (c) 2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * CHAP-MD5 (RFC 1994)
+ * Copyright (c) 2007-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * EAP-PEAP common routines
+ * Copyright (c) 2008-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Base64 encoding/decoding (RFC1341)
+ * Copyright (c) 2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+/*
+ * Base64 encoding/decoding (RFC1341) - test program
+ * Copyright (c) 2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+Open source code.#
+# Copyright (c) 2012, Intel Corporation
+#
+# Author: Johannes Berg <johannes@sipsolutions.net>
+#
+# This software may be distributed under the terms of the BSD license.
+# See README for more details."
+
+Open source code.#!/bin/bash
+#
+# Copyright (C) 2010 The Android Open Source Project
+#
+# This software may be distributed under the terms of the BSD license.
+# See README for more details.
+#"
+
+/*
+ * Example application showing how EAP peer and server code from
+ * wpa_supplicant/hostapd can be used as a library. This example program
+ * initializes both an EAP server and an EAP peer entities and then runs
+ * through an EAP-PEAP/MSCHAPv2 authentication.
+ * Copyright (c) 2007, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+Open source code.#
+# Copyright (C) 2008 The Android Open Source Project
+#
+# This software may be distributed under the terms of the BSD license.
+# See README for more details.
+#"
+
+Open source code.# Copyright (C) 2008 The Android Open Source Project
+#
+# This software may be distributed under the terms of the BSD license.
+# See README for more details.
+#"
+
+Open source code.#
+# Copyright (C) 2010 The Android Open Source Project
+#
+# This software may be distributed under the terms of the BSD license.
+# See README for more details.
+#"
+
+/*
+ * UPnP WPS Device
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
+ *
+ * See below for more details on licensing and code history.
+ */ * Copyright:
+ * Copyright 2008 Atheros Communications.
+ *
+ * The original header (of upnp_wps_device.c) reads:
+ *
+ *  Copyright (c) 2006-2007 Sony Corporation. All Rights Reserved.
+ *
+ *  File Name: upnp_wps_device.c
+ *  Description: EAP-WPS UPnP device source
+ *
+ *   Redistribution and use in source and binary forms, with or without
+ *   modification, are permitted provided that the following conditions
+ *   are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in
+ *       the documentation and/or other materials provided with the
+ *       distribution.
+ *     * Neither the name of Sony Corporation nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *   ""AS IS"" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Portions from Intel libupnp files, e.g. genlib/net/http/httpreadwrite.c
+ * typical header:
+ *
+ * Copyright (c) 2000-2003 Intel Corporation
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * * Neither name of Intel Corporation nor the names of its contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ""AS IS"" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+
+/*
+ * Event loop
+ * Copyright (c) 2002-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * This file defines an event loop interface that supports processing events
+ * from registered timeouts (i.e., do something after N seconds), sockets
+ * (e.g., a new packet available for reading), and signals. eloop.c is an
+ * implementation of this interface using select() and sockets. This is
+ * suitable for most UNIX/POSIX systems. When porting to other operating
+ * systems, it may be necessary to replace that implementation with OS specific
+ * mechanisms.
+ */
+
+
+
+/*
+ * Host AP crypt: host-based CCMP encryption implementation for Host AP driver
+ *
+ * Copyright (c) 2003-2004, Jouni Malinen <jkmaline@cc.hut.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation. See README and COPYING for
+ * more details.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ */
+
+
+
+/*
+ * Host AP crypt: host-based TKIP encryption implementation for Host AP driver
+ *
+ * Copyright (c) 2003-2004, Jouni Malinen <jkmaline@cc.hut.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation. See README and COPYING for
+ * more details.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ */
+
+
+/*
+ * RC4 stream cipher
+ * Copyright (c) 2002-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * SHA1 hash implementation and interface functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * WPA definitions shared between hostapd and wpa_supplicant
+ * Copyright (c) 2002-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * WPA Supplicant - Common definitions
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * WPA Supplicant / Configuration file structures
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * WPA Supplicant / EAPOL state machines
+ * Copyright (c) 2004-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * wpa_supplicant/hostapd - Build time configuration defines
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * This header file can be used to define configuration defines that were
+ * originally defined in Makefile. This is mainly meant for IDE use or for
+ * systems that do not have suitable 'make' tool. In these cases, it may be
+ * easier to have a single place for defining all the needed C pre-processor
+ * defines.
+ */
+
+
+
+/*
+ * wpa_supplicant/hostapd / common helper functions, etc.
+ * Copyright (c) 2002-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README an"
+
+
+
+/*
+ * wpa_supplicant/hostapd - Default include files
+ * Copyright (c) 2005-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * This header file is included into all C files so that commonly used header
+ * files can be selected with OS specific #ifdefs in one place instead of
+ * having to have OS/C library specific selection in many files.
+ */
+
+
+
+/*
+ * wpa_supplicant - Internal WPA state machine definitions
+ * Copyright (c) 2004-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+/*
+ * WPA Supplicant - Layer2 packet interface definition
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * This file defines an interface for layer 2 (link layer) packet sending and
+ * receiving. l2_packet_linux.c is one implementation for such a layer 2
+ * implementation using Linux packet sockets and l2_packet_pcap.c another one
+ * using libpcap and libdnet. When porting %wpa_supplicant to other operating
+ * systems, a new l2_packet implementation may need to be added.
+ */
+
+
+/*
+ * WPA Supplicant / Network configuration structures
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+/*
+ * wpa_supplicant - WPA2/RSN PMKSA cache functions
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+/*
+ * wpa_supplicant - WPA2/RSN pre-authentication functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * wpa_supplicant - WPA definitions
+ * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+
+
+/*
+ * WPA Supplicant / wrapper functions for crypto libraries
+ * Copyright (c) 2004-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ *
+ * This file defines the cryptographic functions that need to be implemented
+ * for wpa_supplicant and hostapd. When TLS is not used, internal
+ * implementation of MD5, SHA1, and AES is used and no external libraries are
+ * required. When TLS is enabled (e.g., by enabling EAP-TLS or EAP-PEAP), the
+ * crypto library used by the TLS implementation is expected to be used for
+ * non-TLS needs, too, in order to save space by not implementing these
+ * functions twice.
+ *
+ * Wrapper code for using each crypto library is in its own file (crypto*.c)
+ * and one of these files is build and linked in to provide the functions
+ * defined here.
+ */
+
+/*
+ * AES-based functions
+ *
+ * - AES Key Wrap Algorithm (128-bit KEK) (RFC3394)
+ * - One-Key CBC MAC (OMAC1) hash with AES-128
+ * - AES-128 CTR mode encryption
+ * - AES-128 EAX mode encryption/decryption
+ * - AES-128 CBC
+ *
+ * Copyright (c) 2003-2007, Jouni Malinen <j@w1.fi>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * Alternatively, this software may be distributed under the terms of BSD
+ * license.
+ *
+ * See README and COPYING for more details.
+ */
+
+/*
+ * WPA Supplicant / UNIX domain socket -based control interface
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+# Copyright 2005 Henrik Brix Andersen <brix@gentoo.org>
+# Distributed under the terms of the GNU General Public License v2
+# Alternatively, this file may be distributed under the terms of the BSD License
+
+
+/* $FreeBSD: src/sys/net80211/ieee80211_radiotap.h,v 1.5 2005/01/22 20:12:05 sam Exp $ */
+/* $NetBSD: ieee80211_radiotap.h,v 1.11 2005/06/22 06:16:02 dyoung Exp $ */
+
+
+/*
+ * Modifications to fit into the linux IEEE 802.11 stack,
+ * Mike Kershaw (dragorn@kismetwireless.net)
+ */
+
+
+/*
+ * Driver interaction with Atheros Linux driver
+ * Copyright (c) 2003-2010, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2010, Atheros Communications
+ * Copyright (c) 2011, Qualcomm Atheros
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+/*
+ * Driver interaction with Linux nl80211/cfg80211
+ * Copyright (c) 2002-2012, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2003-2004, Instant802 Networks, Inc.
+ * Copyright (c) 2005-2006, Devicescape Software, Inc.
+ * Copyright (c) 2007, Johannes Berg <johannes@sipsolutions.net>
+ * Copyright (c) 2009-2010, Atheros Communications
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+/*
+ * Driver interaction with generic Linux Wireless Extensions
+ * Copyright (c) 2003-2011, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+
+/*
+ * EAP method registration
+ * Copyright (c) 2004-2009, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+/*
+ * HTTP for WPS
+ * Copyright (c) 2000-2003 Intel Corporation
+ * Copyright (c) 2006-2007 Sony Corporation
+ * Copyright (c) 2008-2009 Atheros Communications
+ * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
+ *
+ * See wps_upnp.c for more details on licensing and code history.
+ */
+
+
+
+
+/*
+ * WPA Supplicant - Basic AP mode support routines
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2009, Atheros Communications
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+/*
+ * WPA Supplicant - Basic AP mode support routines
+ * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
+ * Copyright (c) 2009, Atheros Communications
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+Example application using RADIUS client as a library
+Copyright (c) 2007, Jouni Malinen <j@w1.fi>
+
+This software may be distributed under the terms of the BSD license.
+
+
+EAP peer/server library and example program
+Copyright (c) 2007, Jouni Malinen <j@w1.fi>
+
+This software may be distributed under the terms of the BSD license.
+See the parent directory README for more details.
+
+
+
+
+wpa_gui icon files
+
+To convert the svg icons to other formats, make sure inkscape and imagemagick
+are installed and use `make' to create various sized png and xpm icons.
+
+
+wpa_gui.svg
+-----------
+
+Copyright (c) 2008 Bernard Gray <bernard.gray@gmail.com>
+
+The wpa_gui icon is licensed under the GPL version 2. Alternatively, the icon
+may be distributed under the terms of BSD license.
+
+
+ap.svg
+------
+
+mystica_Wireless_Router.svg
+
+http://openclipart.org/media/files/mystica/8390
+Wireless Router
+by:     mystica
+last change:    April 20, 2008 10:32 pm (File added)
+date:   April 20, 2008 10:31 pm
+license: PD
+
+
+laptop.svg
+----------
+
+metalmarious_Laptop.svg
+
+http://openclipart.org/media/files/metalmarious/4056
+Laptop
+by:      metalmarious
+last change:    May 18, 2008 07:04 pm (File added)
+date:   August 27, 2007 04:44 am
+license: PD
+
+
+group.svg
+---------
+
+http://www.openclipart.org/detail/25428
+http://www.openclipart.org/people/Anonymous/Anonymous_Network.svg
+Uploader:
+    Anonymous
+Drawn by:
+    Andrew Fitzsimon / Anonymous
+Created:
+    2009-04-29 04:07:37
+Description:
+    A network icon by Andrew Fitzsimon. Etiquette Icon set.
+    From 0.18 OCAL database.
+
+Public Domain
+
+
+
+invitation.svg
+--------------
+
+http://www.openclipart.org/detail/974
+http://www.openclipart.org/people/jean_victor_balin/jean_victor_balin_unknown_green.svg
+Uploader:
+    jean_victor_balin
+Drawn by:
+    jean_victor_balin
+Created:
+    2006-10-27 02:12:13
+Description:
+
+Public Domain
+
+
+/*
+ * SHA1 hash implementation and interface functions
+ * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+ *
+ * This software may be distributed under the terms of the BSD license.
+ * See README for more details.
+ */
+
+
+
+
+
+
+
+

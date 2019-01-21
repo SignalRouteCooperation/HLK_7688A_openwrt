@@ -1,0 +1,11 @@
+--- a//arch/mips/ath79/gpio.c
++++ b//arch/mips/ath79/gpio.c
+@@ -188,7 +188,7 @@ void __init ath79_gpio_output_select(unsigned gpio, u8 val)
+ 	unsigned int reg;
+ 	u32 t, s;
+ 
+-	BUG_ON(!soc_is_ar934x());
++	//BUG_ON(!soc_is_ar934x());
+ 
+ 	if (gpio >= AR934X_GPIO_COUNT)
+ 		return;

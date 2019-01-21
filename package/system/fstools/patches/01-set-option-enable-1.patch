@@ -1,0 +1,12 @@
+diff -Naur a/block.c b/block.c
+--- a/block.c	2016-07-11 12:37:38.000000000 +0800
++++ b/block.c	2016-08-29 10:13:17.195431016 +0800
+@@ -554,7 +554,7 @@
+ 		printf("\toption\tuuid\t'%s'\n", pr->uuid);
+ 	else
+ 		printf("\toption\tdevice\t'%s'\n", pr->dev);
+-	printf("\toption\tenabled\t'0'\n\n");
++	printf("\toption\tenabled\t'1'\n\n");
+ 
+ 	return 0;
+ }

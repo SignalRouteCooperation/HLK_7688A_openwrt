@@ -1,0 +1,33 @@
+diff -urN linux-3.18.23.orig/arch/mips/ath79/dev-m25p80.c linux-3.18.23/arch/mips/ath79/dev-m25p80.c
+--- linux-3.18.23.orig/arch/mips/ath79/dev-m25p80.c	2016-05-11 16:35:01.876778446 +0800
++++ linux-3.18.23/arch/mips/ath79/dev-m25p80.c	2016-05-11 16:35:50.020634661 +0800
+@@ -56,6 +56,17 @@
+ 	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 1);
+ }
+ 
++/* gukq add 20160510 support for other qca routers */
++void __init ath79_register_m25p80_32M(struct flash_platform_data *pdata)
++{
++	ath79_spi_data.bus_num = 0;
++	ath79_spi_data.num_chipselect = 1;
++	ath79_spi0_cdata.is_flash = false;  //Feng
++	ath79_spi_info[0].platform_data = pdata;
++	ath79_register_spi(&ath79_spi_data, ath79_spi_info, 1);
++}
++/* gukq added over */
++
+ static struct flash_platform_data *multi_pdata;
+ 
+ static struct mtd_info *concat_devs[2] = { NULL, NULL };
+diff -urN linux-3.18.23.orig/arch/mips/ath79/dev-m25p80.h linux-3.18.23/arch/mips/ath79/dev-m25p80.h
+--- linux-3.18.23.orig/arch/mips/ath79/dev-m25p80.h	2016-05-11 16:59:15.904718122 +0800
++++ linux-3.18.23/arch/mips/ath79/dev-m25p80.h	2016-05-11 16:59:48.964757409 +0800
+@@ -14,4 +14,8 @@
+ void ath79_register_m25p80(struct flash_platform_data *pdata) __init;
+ void ath79_register_m25p80_multi(struct flash_platform_data *pdata) __init;
+ 
++/* gukq add 20160510 */
++void ath79_register_m25p80_32M(struct flash_platform_data *pdata) __init;
++/* gukq added over */
++
+ #endif /* _ATH79_DEV_M25P80_H */

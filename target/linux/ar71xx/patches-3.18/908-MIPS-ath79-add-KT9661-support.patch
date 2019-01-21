@@ -1,0 +1,41 @@
+Index: linux-3.18.23/arch/mips/ath79/Kconfig
+===================================================================
+--- linux-3.18.23.orig/arch/mips/ath79/Kconfig	2016-03-14 14:30:25.093985607 +0900
++++ linux-3.18.23/arch/mips/ath79/Kconfig	2016-03-14 14:30:25.205985605 +0900
+@@ -1318,6 +1318,15 @@
+ 	select ATH79_DEV_USB
+ 	select ATH79_NVRAM
+ 
++config ATH79_MACH_KT9661
++	bool "KunTeng Foxconn KT9661 support"
++	select SOC_QCA955X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_WMAC
++
+ endmenu
+ 
+ config SOC_AR71XX
+Index: linux-3.18.23/arch/mips/ath79/Makefile
+===================================================================
+--- linux-3.18.23.orig/arch/mips/ath79/Makefile	2016-03-14 14:30:25.093985607 +0900
++++ linux-3.18.23/arch/mips/ath79/Makefile	2016-03-14 14:30:25.205985605 +0900
+@@ -170,3 +170,4 @@
+ obj-$(CONFIG_ATH79_MACH_ZCN_1523H)	+= mach-zcn-1523h.o
+ obj-$(CONFIG_ATH79_MACH_CARAMBOLA2)	+= mach-carambola2.o
+ obj-$(CONFIG_ATH79_MACH_NBG6716)	+= mach-nbg6716.o
++obj-$(CONFIG_ATH79_MACH_KT9661)	+= mach-kt9661.o
+Index: linux-3.18.23/arch/mips/ath79/machtypes.h
+===================================================================
+--- linux-3.18.23.orig/arch/mips/ath79/machtypes.h	2016-03-14 14:30:25.093985607 +0900
++++ linux-3.18.23/arch/mips/ath79/machtypes.h	2016-03-14 14:35:37.913980005 +0900
+@@ -218,6 +218,7 @@
+ 	ATH79_MACH_WZR_450HP2,		/* Buffalo WZR-450HP2 */
+ 	ATH79_MACH_ZCN_1523H_2,		/* Zcomax ZCN-1523H-2-xx */
+ 	ATH79_MACH_ZCN_1523H_5,		/* Zcomax ZCN-1523H-5-xx */
++	ATH79_MACH_KT9661,	/* KunTeng Foxconn KT9661 */
+ };
+ 
+ #endif /* _ATH79_MACHTYPE_H */

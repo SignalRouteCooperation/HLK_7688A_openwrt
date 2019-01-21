@@ -1,0 +1,13 @@
+Index: linux-3.18.23/Kconfig
+===================================================================
+--- linux-3.18.23.orig/Kconfig	2015-10-29 11:49:46.000000000 +0900
++++ linux-3.18.23/Kconfig	2015-12-08 17:06:57.779506887 +0900
+@@ -8,4 +8,8 @@
+ 	string
+ 	option env="SRCARCH"
+ 
++config SUPPORT_OPENWRT
++	bool
++	default y
++
+ source "arch/$SRCARCH/Kconfig"

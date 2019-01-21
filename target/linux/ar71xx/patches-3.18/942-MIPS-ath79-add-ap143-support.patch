@@ -1,0 +1,148 @@
+--- a/arch/mips/ath79/Kconfig
++++ b/arch/mips/ath79/Kconfig
+@@ -146,6 +146,99 @@ config ATH79_MACH_AP81
+ 	  Say 'Y' here if you want your kernel to support the
+ 	  Atheros AP81 reference board.
+ 
++config ATH79_MACH_AP143
++	bool "Atheros AP143 reference board"
++	select SOC_QCA953X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_SPI
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_ETH
++	select ATH79_DEV_M25P80
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  Atheros AP143 reference board.
++
++config ATH79_MACH_AP147
++	bool "Atheros AP147 reference board"
++	select SOC_QCA953X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  QCA AP147 reference boards.
++
++config ATH79_MACH_AP152
++	bool "Atheros AP152 reference board"
++	select SOC_QCA956X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  QCA AP152 reference boards.
++
++
++config ATH79_MACH_GB_CGW600
++	bool "GBCOM CGW600 board"
++	select SOC_QCA953X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  GBCOM CGW600 board.
++
++config ATH79_MACH_GB_CGW800
++	bool "GBCOM CGW800 board"
++	select SOC_QCA953X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  GBCOM CGW800 board.
++
++config ATH79_MACH_GB_TA2025AC
++	bool "GBCOM TA2025AC board"
++	select SOC_QCA956X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  GBCOM TA2025AC board.
++
++config ATH79_MACH_GB_OA5025
++	bool "GBCOM OA5025 board"
++	select SOC_QCA956X
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  GBCOM OA5025 board.
++
+ config ATH79_MACH_AP83
+ 	bool "Atheros AP83 board support"
+ 	select SOC_AR913X
+--- a/arch/mips/ath79/Makefile
++++ b/arch/mips/ath79/Makefile
+@@ -49,6 +49,9 @@ obj-$(CONFIG_ATH79_MACH_AP113)		+= mach-
+ obj-$(CONFIG_ATH79_MACH_AP121)		+= mach-ap121.o
+ obj-$(CONFIG_ATH79_MACH_AP132)		+= mach-ap132.o
+ obj-$(CONFIG_ATH79_MACH_AP136)		+= mach-ap136.o
++obj-$(CONFIG_ATH79_MACH_AP143)		+= mach-ap143.o
++obj-$(CONFIG_ATH79_MACH_AP147)		+= mach-ap147.o
++obj-$(CONFIG_ATH79_MACH_AP152)		+= mach-ap152.o
+ obj-$(CONFIG_ATH79_MACH_AP81)		+= mach-ap81.o
+ obj-$(CONFIG_ATH79_MACH_AP83)		+= mach-ap83.o
+ obj-$(CONFIG_ATH79_MACH_AP96)		+= mach-ap96.o
+@@ -79,6 +82,10 @@ obj-$(CONFIG_ATH79_MACH_EL_MINI)	+= mach
+ obj-$(CONFIG_ATH79_MACH_EPG5000)	+= mach-epg5000.o
+ obj-$(CONFIG_ATH79_MACH_ESR1750)	+= mach-esr1750.o
+ obj-$(CONFIG_ATH79_MACH_F9K1115V2)	+= mach-f9k1115v2.o
++# obj-$(CONFIG_ATH79_MACH_GB_CGW600)		+= mach-gb-cgw600.o
++# obj-$(CONFIG_ATH79_MACH_GB_CGW800)		+= mach-gb-cgw800.o
++# obj-$(CONFIG_ATH79_MACH_GB_TA2025AC)		+= mach-gb-ta2025ac.o
++# obj-$(CONFIG_ATH79_MACH_GB_OA5025)		+= mach-gb-oa5025.o
+ obj-$(CONFIG_ATH79_MACH_GL_INET)	+= mach-gl-inet.o
+ obj-$(CONFIG_ATH79_MACH_GS_MINIBOX_V1)	+= mach-gs-minibox-v1.o
+ obj-$(CONFIG_ATH79_MACH_GS_OOLITE)	+= mach-gs-oolite.o
+--- a/arch/mips/ath79/machtypes.h
++++ b/arch/mips/ath79/machtypes.h
+@@ -31,6 +31,9 @@ enum ath79_mach_type {
+ 	ATH79_MACH_AP135_020,		/* Atheros AP135-020 reference board */
+ 	ATH79_MACH_AP136_010,		/* Atheros AP136-010 reference board */
+ 	ATH79_MACH_AP136_020,		/* Atheros AP136-020 reference board */
++	ATH79_MACH_AP143,		/* Atheros AP143 reference board */
++	ATH79_MACH_AP147_010,		/* Atheros AP147-010 reference board */
++	ATH79_MACH_AP152,		/* Atheros AP152 reference board */
+ 	ATH79_MACH_AP81,		/* Atheros AP81 reference board */
+ 	ATH79_MACH_AP83,		/* Atheros AP83 */
+ 	ATH79_MACH_AP96,		/* Atheros AP96 */
+@@ -68,6 +71,10 @@ enum ath79_mach_type {
+ 	ATH79_MACH_ESR1750,		/* EnGenius ESR1750 */
+ 	ATH79_MACH_EPG5000,		/* EnGenius EPG5000 */
+ 	ATH79_MACH_F9K1115V2,		/* Belkin AC1750DB */
++	ATH79_MACH_GB_CGW600,	/*GBCOM CGW600*/
++	ATH79_MACH_GB_CGW800,	/*GBCOM CGW800*/
++	ATH79_MACH_GB_TA2025AC,  /*GBCOM TA2025AC*/
++	ATH79_MACH_GB_OA5025,	/*GBCOM OA5025*/
+ 	ATH79_MACH_GL_INET,		/* GL-CONNECT GL-INET */
+ 	ATH79_MACH_GS_MINIBOX_V1,	/* Gainstrong MiniBox V1.0 */
+ 	ATH79_MACH_GS_OOLITE,           /* GS OOLITE V1.0 */

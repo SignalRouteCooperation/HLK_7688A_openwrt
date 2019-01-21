@@ -1,0 +1,9 @@
+debug 1
+logfile /tmp/ppp.log
+noipdefault
+noaccomp
+nocrtscts
+lock
+maxfail 0
+lcp-echo-failure 5
+lcp-echo-interval 0

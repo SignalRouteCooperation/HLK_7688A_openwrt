@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+
+START=02
+STOP=98
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+start() {
+	stop
+	service_start /usr/sbin/kpshd
+}
+
+stop() {
+	service_stop /usr/sbin/kpshd
+}

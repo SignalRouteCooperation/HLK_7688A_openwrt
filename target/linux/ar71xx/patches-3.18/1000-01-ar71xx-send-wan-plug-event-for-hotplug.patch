@@ -1,0 +1,33 @@
+--- a/drivers/net/ethernet/atheros/ag71xx/ag71xx_phy.c
++++ b/drivers/net/ethernet/atheros/ag71xx/ag71xx_phy.c
+@@ -19,6 +19,8 @@ static void ag71xx_phy_link_adjust(struc
+ 	struct phy_device *phydev = ag->phy_dev;
+ 	unsigned long flags;
+ 	int status_change = 0;
++	char port_num[32];
++	char *envp[] = {port_num, NULL};
+ 
+ 	spin_lock_irqsave(&ag->lock, flags);
+ 
+@@ -37,7 +39,20 @@ static void ag71xx_phy_link_adjust(struc
+ 	ag->speed = phydev->speed;
+ 
+ 	if (status_change)
+-		ag71xx_link_adjust(ag);
++        {     /*modify by chenzejun 20160419 for wan hotplug */
++            if (ag->link) 
++            {  
++                //PORT_ID is 0 to be consistent with ralink drivers
++                snprintf(port_num, sizeof(port_num), "PORT_ID=%d", 0);
++                kobject_uevent_env(&dev->dev.kobj, KOBJ_ONLINE, envp);
++            }
++            else
++            {
++                snprintf(port_num, sizeof(port_num), "PORT_ID=%d", 0);
++                kobject_uevent_env(&dev->dev.kobj, KOBJ_OFFLINE, envp);
++            }
++	    ag71xx_link_adjust(ag);
++        }
+ 
+ 	spin_unlock_irqrestore(&ag->lock, flags);
+ }

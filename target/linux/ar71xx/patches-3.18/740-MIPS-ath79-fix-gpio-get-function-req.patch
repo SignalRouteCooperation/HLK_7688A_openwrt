@@ -1,0 +1,12 @@
+--- a/arch/mips/ath79/gpio.c
++++ b/arch/mips/ath79/gpio.c
+@@ -149,7 +149,8 @@ static void __iomem *ath79_gpio_get_function_reg(void)
+ 	    soc_is_ar933x())
+ 		reg = AR71XX_GPIO_REG_FUNC;
+ 	else if (soc_is_ar934x() ||
+-		 soc_is_qca956x())
++		 soc_is_qca956x() ||
++		 soc_is_qca953x())
+ 		reg = AR934X_GPIO_REG_FUNC;
+ 	else
+ 		BUG();

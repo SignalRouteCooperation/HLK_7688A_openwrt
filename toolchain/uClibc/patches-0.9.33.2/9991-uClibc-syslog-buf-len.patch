@@ -1,0 +1,11 @@
+--- a/libc/misc/syslog/syslog.c
++++ b/libc/misc/syslog/syslog.c
+@@ -191,7 +191,7 @@ vsyslog(int pri, const char *fmt, va_lis
+ 	time_t now;
+ 	int fd, saved_errno;
+ 	int rc;
+-	char tbuf[1024]; /* syslogd is unable to handle longer messages */
++	char tbuf[8192]; /* syslogd is unable to handle longer messages */
+ 
+ 	/* Just throw out this message if pri has bad bits. */
+ 	if ((pri & ~(LOG_PRIMASK|LOG_FACMASK)) != 0)

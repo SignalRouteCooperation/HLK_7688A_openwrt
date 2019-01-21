@@ -1,0 +1,58 @@
+--- a/drivers/net/ethernet/ralink/esw_rt3052.c
++++ b/drivers/net/ethernet/ralink/esw_rt3052.c
+@@ -212,6 +212,7 @@ enum {
+ };
+ 
+ struct esw_port {
++	bool	link_status;
+ 	bool	disable;
+ 	bool	doubletag;
+ 	bool	untag;
+@@ -509,6 +510,10 @@ static void esw_hw_init(struct rt305x_es
+ 	for (i = 0; i < 6; i++)
+ 		esw->ports[i].disable = (port_disable & (1 << i)) != 0;
+ 
++	for (i = 0; i < 6; i++)
++		esw->ports[i].link_status = 0;
++
++
+ 	if (ralink_soc == RT305X_SOC_RT3352) {
+ 		/* reset EPHY */
+ 		fe_reset(RT5350_RESET_EPHY);
+@@ -720,6 +725,9 @@ static irqreturn_t esw_interrupt(int irq
+ {
+ 	struct rt305x_esw *esw = (struct rt305x_esw *) _esw;
+ 	u32 status;
++	u32 poa, i, link_status;
++	char port_num[32];
++	char *envp[] = {port_num, NULL};
+ 
+ 	status = esw_r32(esw, RT305X_ESW_REG_ISR);
+ 	if (status & RT305X_ESW_PORT_ST_CHG) {
+@@ -727,6 +735,26 @@ static irqreturn_t esw_interrupt(int irq
+ 		link >>= RT305X_ESW_POA_LINK_SHIFT;
+ 		link &= RT305X_ESW_POA_LINK_MASK;
+ 		dev_info(esw->dev, "link changed 0x%02X\n", link);
++
++                          for (i = 0; i < RT305X_ESW_NUM_PORTS; i++)
++                          {
++                	        poa = esw_r32(esw, RT305X_ESW_REG_POA) >> i;
++                	        link_status = (poa >> RT305X_ESW_LINK_S) & 1;
++
++                                  if (link_status != esw->ports[i].link_status)
++                                  {
++                                        esw->ports[i].link_status = link_status;
++                                        snprintf(port_num, sizeof(port_num), "PORT_ID=%d", i);
++                                        if (link_status)
++                                        {
++                 		        kobject_uevent_env(&esw->dev->kobj, KOBJ_ONLINE, envp);
++         		              }
++         		              else
++         		              {
++                 		       kobject_uevent_env(&esw->dev->kobj, KOBJ_OFFLINE, envp);
++         		              }
++                                  }
++                          }
+ 	}
+ 	esw_w32(esw, status, RT305X_ESW_REG_ISR);
+ 

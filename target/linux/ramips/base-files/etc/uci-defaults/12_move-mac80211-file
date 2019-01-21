@@ -1,0 +1,9 @@
+#!/bin/sh
+
+IS_MT7620_LOAD=`ls /sys/module|grep mt7620`
+[ -z $IS_MT7620_LOAD ] && exit 0
+
+# gukq 20160531 commenttd 2lines
+#[ -f /lib/wifi/mac80211.sh ] && echo "" > /lib/wifi/mac80211.sh
+#[ -f /lib/netifd/wireless/mac80211.sh ] && echo "" > /lib/netifd/wireless/mac80211.sh
+exit 0

@@ -1,0 +1,13 @@
+diff -urpN a/iwlib.c b/iwlib.c
+--- a/iwlib.c	2016-11-08 10:04:43.337101125 +0800
++++ b/iwlib.c	2016-11-08 10:07:22.680265018 +0800
+@@ -650,7 +650,8 @@ iw_get_priv_info(int		skfd,
+       else
+ 	maxpriv *= 2;
+     }
+-  while(maxpriv < 1000);
++  // gukq 20161108 using 1500 instead of 1000
++  while(maxpriv < 1500);
+ 
+   /* Cleanup */
+   if(priv)

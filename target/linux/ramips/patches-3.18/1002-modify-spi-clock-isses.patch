@@ -1,0 +1,14 @@
+Index: linux-3.18.23/drivers/spi/spi-mt7621.c
+===================================================================
+--- linux-3.18.23.orig/drivers/spi/spi-mt7621.c
++++ linux-3.18.23/drivers/spi/spi-mt7621.c
+@@ -199,6 +199,9 @@ static int mt7621_spi_transfer_half_dupl
+ 		if (!buf)
+ 			continue;
+ 
++		if (t->speed_hz < speed)
++			speed = t->speed_hz;
++
+ 		if (WARN_ON(len + t->len > 36)) {
+ 			status = -EIO;
+ 			goto msg_done;

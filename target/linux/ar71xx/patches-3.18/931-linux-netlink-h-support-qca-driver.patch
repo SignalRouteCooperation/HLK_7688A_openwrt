@@ -1,0 +1,21 @@
+--- a/include/net/netlink.h
++++ b/include/net/netlink.h
+@@ -1186,3 +1186,18 @@ static inline int nla_validate_nested(co
+ 	nla_for_each_attr(pos, nla_data(nla), nla_len(nla), rem)
+ 
+ #endif
++//proc.zhu
++#define NLA_PUT(skb, attrtype, attrlen, data) \
++	do { \
++		if (unlikely(nla_put(skb, attrtype, attrlen, data) < 0)) \
++			goto nla_put_failure; \
++	} while(0)
++
++#define NLA_PUT_TYPE(skb, type, attrtype, value) \
++	do { \
++		type __tmp = value; \
++		NLA_PUT(skb, attrtype, sizeof(type), &__tmp); \
++	} while(0)
++
++#define NLA_PUT_STRING(skb, attrtype, value) \
++	NLA_PUT(skb, attrtype, strlen(value) + 1, value)

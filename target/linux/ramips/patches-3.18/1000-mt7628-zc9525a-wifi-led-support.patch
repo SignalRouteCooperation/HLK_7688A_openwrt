@@ -1,0 +1,106 @@
+Index: linux-3.18.23/drivers/gpio/gpio-mt7621.c
+===================================================================
+--- linux-3.18.23.orig/drivers/gpio/gpio-mt7621.c	2016-03-10 19:18:45.107864835 +0900
++++ linux-3.18.23/drivers/gpio/gpio-mt7621.c	2016-03-10 19:25:14.311857865 +0900
+@@ -16,10 +16,36 @@
+ #include <linux/irqdomain.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
++#include <asm/mach-ralink/ralink_regs.h>
+ 
+ #define MTK_MAX_BANK		3
+ #define MTK_BANK_WIDTH		32
+ 
++#define SYSC_REG_GPIO1_MDOE     0x60
++#define SYSC_REG_GPIO2_MDOE     0x64
++
++#define WDT_GPIO_MODE    (1 << 14)
++#define REFCLK_GPIO_MODE    (1 << 18)
++#define GPIO0_GPIO_MODE    (3 << 0)
++
++#define SPI_CS1_GPIO_MODE   (1 << 4)
++#define SPI_CS1_MODE_MASK   (3 << 4)
++
++#define WLAN_GPIO_MODE    (1 << 0)
++#define WLAN_GPIO_MASK    (3 << 0)
++
++#define P0_LED_GPIO_MASK    (3 << 2)
++#define P1_LED_MODE_MASK    (3 << 4)
++#define P2_LED_MODE_MASK    (3 << 6)
++#define P3_LED_MODE_MASK    (3 << 8)
++#define P4_LED_MODE_MASK    (3 << 10)
++
++#define P0_LED_GPIO_MODE    (1 << 2)
++#define P1_LED_GPIO_MODE    (1 << 4)
++#define P2_LED_GPIO_MODE    (1 << 6)
++#define P3_LED_GPIO_MODE    (1 << 8)
++#define P4_LED_GPIO_MODE    (1 << 10)
++
+ enum mediatek_gpio_reg {
+ 	GPIO_REG_CTRL = 0,
+ 	GPIO_REG_POL,
+@@ -301,6 +327,55 @@
+ 	.map = mediatek_gpio_gpio_map,
+ };
+ 
++
++static void 
++zc9525a_gpio_init(void)
++{
++	u32 gpio1_mode;
++    u32 gpio2_mode;
++
++    gpio1_mode = rt_sysc_r32(SYSC_REG_GPIO1_MDOE);
++    gpio2_mode = rt_sysc_r32(SYSC_REG_GPIO2_MDOE);
++
++    /*
++     * reset button and system
++     */
++    gpio1_mode |= WDT_GPIO_MODE | REFCLK_GPIO_MODE;
++    gpio1_mode &= ~GPIO0_GPIO_MODE;     // internet led
++
++    /*
++     * signal LED SPI_CS1
++     */
++    gpio1_mode &= ~SPI_CS1_MODE_MASK;
++    gpio1_mode |= SPI_CS1_GPIO_MODE;
++
++    /*
++     * wlan gpio to gpio mode
++     */
++    gpio2_mode &= ~WLAN_GPIO_MASK;
++    gpio2_mode |= WLAN_GPIO_MODE;
++
++    /*
++     * setup ephy led mode
++     */
++    gpio2_mode &= ~(P0_LED_GPIO_MASK | P1_LED_MODE_MASK | P2_LED_MODE_MASK | P3_LED_MODE_MASK | P4_LED_MODE_MASK);
++
++    /*
++     * PHY2 LED for usb
++     */
++    gpio2_mode &= ~P2_LED_MODE_MASK;
++    gpio2_mode |= P2_LED_GPIO_MODE;
++
++    /*
++     * PHY3 LED for wlan 5G led
++     */
++    gpio2_mode &= ~P3_LED_MODE_MASK;
++    gpio2_mode |= P3_LED_GPIO_MODE;
++	
++	rt_sysc_w32(gpio1_mode, SYSC_REG_GPIO1_MDOE);
++    rt_sysc_w32(gpio2_mode, SYSC_REG_GPIO2_MDOE);
++}
++
+ static int
+ mediatek_gpio_probe(struct platform_device *pdev)
+ {
+@@ -320,6 +395,8 @@
+ 			dev_err(&pdev->dev, "irq_domain_add_linear failed\n");
+ 	}
+ 
++	zc9525a_gpio_init();
++	
+ 	for_each_child_of_node(np, bank)
+ 		if (of_device_is_compatible(bank, "mtk,mt7621-gpio-bank"))
+ 			mediatek_gpio_bank_probe(pdev, bank);

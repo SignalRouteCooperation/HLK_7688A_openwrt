@@ -1,0 +1,1200 @@
+--- a/arch/mips/ath79/common.h
++++ b/arch/mips/ath79/common.h
+@@ -28,6 +28,7 @@ void ath79_gpio_function_enable(u32 mask
+ void ath79_gpio_function_disable(u32 mask);
+ void ath79_gpio_function_setup(u32 set, u32 clear);
+ void ath79_gpio_output_select(unsigned gpio, u8 val);
++int ath79_gpio_direction_select(unsigned gpio, bool oe);
+ void ath79_gpio_init(void);
+ 
+ #endif /* __ATH79_COMMON_H */
+--- a/arch/mips/ath79/dev-eth.c
++++ b/arch/mips/ath79/dev-eth.c
+@@ -183,7 +183,8 @@ void __init ath79_register_mdio(unsigned
+ 	    ath79_soc == ATH79_SOC_AR9342 ||
+ 	    ath79_soc == ATH79_SOC_AR9344 ||
+ 	    ath79_soc == ATH79_SOC_QCA9556 ||
+-	    ath79_soc == ATH79_SOC_QCA9558)
++	    ath79_soc == ATH79_SOC_QCA9558 ||
++	    ath79_soc == ATH79_SOC_QCA9561)
+ 		max_id = 1;
+ 	else
+ 		max_id = 0;
+@@ -198,7 +199,6 @@ void __init ath79_register_mdio(unsigned
+ 	case ATH79_SOC_AR9330:
+ 	case ATH79_SOC_AR9331:
+ 	case ATH79_SOC_QCA9533:
+-	case ATH79_SOC_QCA9561:
+ 	case ATH79_SOC_TP9343:
+ 		mdio_dev = &ath79_mdio1_device;
+ 		mdio_data = &ath79_mdio1_data;
+@@ -209,6 +209,7 @@ void __init ath79_register_mdio(unsigned
+ 	case ATH79_SOC_AR9344:
+ 	case ATH79_SOC_QCA9556:
+ 	case ATH79_SOC_QCA9558:
++	case ATH79_SOC_QCA9561:
+ 		if (id == 0) {
+ 			mdio_dev = &ath79_mdio0_device;
+ 			mdio_data = &ath79_mdio0_data;
+@@ -258,7 +259,6 @@ void __init ath79_register_mdio(unsigned
+ 		break;
+ 
+ 	case ATH79_SOC_QCA9533:
+-	case ATH79_SOC_QCA9561:
+ 	case ATH79_SOC_TP9343:
+ 		mdio_data->builtin_switch = 1;
+ 		break;
+@@ -267,6 +267,12 @@ void __init ath79_register_mdio(unsigned
+ 	case ATH79_SOC_QCA9558:
+ 		mdio_data->is_ar934x = 1;
+ 		break;
++		
++	case ATH79_SOC_QCA9561:
++		if (id == 1)
++			mdio_data->builtin_switch = 1;
++		mdio_data->is_ar934x = 1;
++		break;
+ 
+ 	default:
+ 		break;
+@@ -387,6 +393,16 @@ static void qca955x_set_speed_sgmii(int
+ 	iounmap(base);
+ }
+ 
++static void qca956x_set_speed_sgmii(int speed)
++{
++	void __iomem *base;
++	u32 val = ath79_get_eth_pll(0, speed);
++
++	base = ioremap_nocache(AR71XX_PLL_BASE, AR71XX_PLL_SIZE);
++	__raw_writel(val, base + QCA955X_PLL_ETH_SGMII_CONTROL_REG);
++	iounmap(base);
++}
++
+ static void ath79_set_speed_dummy(int speed)
+ {
+ }
+@@ -517,6 +533,10 @@ struct ag71xx_switch_platform_data ath79
+ #define AR934X_PLL_VAL_100	0x00000101
+ #define AR934X_PLL_VAL_10	0x00001616
+ 
++#define QCA956X_PLL_VAL_1000	0x03000000
++#define QCA956X_PLL_VAL_100	0x00000101
++#define QCA956X_PLL_VAL_10	0x00001919
++
+ static void __init ath79_init_eth_pll_data(unsigned int id)
+ {
+ 	struct ath79_eth_pll_data *pll_data;
+@@ -575,12 +595,17 @@ static void __init ath79_init_eth_pll_da
+ 	case ATH79_SOC_QCA9533:
+ 	case ATH79_SOC_QCA9556:
+ 	case ATH79_SOC_QCA9558:
+-	case ATH79_SOC_QCA9561:
+ 	case ATH79_SOC_TP9343:
+ 		pll_10 = AR934X_PLL_VAL_10;
+ 		pll_100 = AR934X_PLL_VAL_100;
+ 		pll_1000 = AR934X_PLL_VAL_1000;
+ 		break;
++		
++	case ATH79_SOC_QCA9561:
++		pll_10 = QCA956X_PLL_VAL_10;
++		pll_100 = QCA956X_PLL_VAL_100;
++		pll_1000 = QCA956X_PLL_VAL_1000;
++		break;
+ 
+ 	default:
+ 		BUG();
+@@ -633,7 +658,6 @@ static int __init ath79_setup_phy_if_mod
+ 		case ATH79_SOC_AR9330:
+ 		case ATH79_SOC_AR9331:
+ 		case ATH79_SOC_QCA9533:
+-		case ATH79_SOC_QCA9561:
+ 		case ATH79_SOC_TP9343:
+ 			pdata->phy_if_mode = PHY_INTERFACE_MODE_MII;
+ 			break;
+@@ -657,6 +681,7 @@ static int __init ath79_setup_phy_if_mod
+ 
+ 		case ATH79_SOC_QCA9556:
+ 		case ATH79_SOC_QCA9558:
++		case ATH79_SOC_QCA9561:
+ 			switch (pdata->phy_if_mode) {
+ 			case PHY_INTERFACE_MODE_MII:
+ 			case PHY_INTERFACE_MODE_RGMII:
+@@ -1028,7 +1053,6 @@ void __init ath79_register_eth(unsigned
+ 		break;
+ 
+ 	case ATH79_SOC_QCA9533:
+-	case ATH79_SOC_QCA9561:
+ 	case ATH79_SOC_TP9343:
+ 		if (id == 0) {
+ 			pdata->reset_bit = AR933X_RESET_GE0_MAC |
+@@ -1095,6 +1119,43 @@ void __init ath79_register_eth(unsigned
+ 			pdata->fifo_cfg3 = 0x01f00140;
+ 		break;
+ 
++	case ATH79_SOC_QCA9561:
++		if (id == 0) {
++			pdata->reset_bit = QCA955X_RESET_GE0_MAC |
++					   QCA955X_RESET_GE0_MDIO;
++
++			if (pdata->phy_if_mode == PHY_INTERFACE_MODE_SGMII)
++				pdata->set_speed = qca956x_set_speed_sgmii;
++			else
++				pdata->set_speed = ath79_set_speed_ge0;
++		} else {
++			pdata->reset_bit = QCA955X_RESET_GE1_MAC |
++					   QCA955X_RESET_GE1_MDIO;
++
++			pdata->set_speed = ath79_set_speed_dummy;
++
++			pdata->switch_data = &ath79_switch_data;
++
++			pdata->speed = SPEED_1000;
++			pdata->duplex = DUPLEX_FULL;
++
++			/* reset the built-in switch */
++			ath79_device_reset_set(AR934X_RESET_ETH_SWITCH);
++			ath79_device_reset_clear(AR934X_RESET_ETH_SWITCH);
++		}
++
++		pdata->ddr_flush = ath79_ddr_no_flush;
++		pdata->has_gbit = 1;
++		pdata->is_ar724x = 1;
++
++		if (!pdata->fifo_cfg1)
++			pdata->fifo_cfg1 = 0x0010ffff;
++		if (!pdata->fifo_cfg2)
++			pdata->fifo_cfg2 = 0x015500aa;
++		if (!pdata->fifo_cfg3)
++			pdata->fifo_cfg3 = 0x01f00140;
++		break;
++
+ 	default:
+ 		BUG();
+ 	}
+@@ -1135,7 +1196,6 @@ void __init ath79_register_eth(unsigned
+ 		case ATH79_SOC_AR9330:
+ 		case ATH79_SOC_AR9331:
+ 		case ATH79_SOC_QCA9533:
+-		case ATH79_SOC_QCA9561:
+ 		case ATH79_SOC_TP9343:
+ 			pdata->mii_bus_dev = &ath79_mdio1_device.dev;
+ 			break;
+@@ -1144,6 +1204,11 @@ void __init ath79_register_eth(unsigned
+ 		case ATH79_SOC_QCA9558:
+ 			/* don't assign any MDIO device by default */
+ 			break;
++			
++		case ATH79_SOC_QCA9561:
++			if (pdata->phy_if_mode != PHY_INTERFACE_MODE_SGMII)
++				pdata->mii_bus_dev = &ath79_mdio1_device.dev;
++			break;
+ 
+ 		default:
+ 			pdata->mii_bus_dev = &ath79_mdio0_device.dev;
+--- a/arch/mips/ath79/dev-wmac.c
++++ b/arch/mips/ath79/dev-wmac.c
+@@ -398,6 +398,11 @@ void __init ath79_wmac_set_ext_lna_gpio(
+ 		ar934x_set_ext_lna_gpio(chain, gpio);
+ }
+ 
++void __init ath79_wmac_set_led_pin(int gpio)
++{
++	ath79_wmac_data.led_pin = gpio;
++}
++
+ void __init ath79_register_wmac(u8 *cal_data, u8 *mac_addr)
+ {
+ 	if (soc_is_ar913x())
+--- a/arch/mips/ath79/dev-wmac.h
++++ b/arch/mips/ath79/dev-wmac.h
+@@ -18,6 +18,7 @@ void ath79_wmac_disable_2ghz(void);
+ void ath79_wmac_disable_5ghz(void);
+ void ath79_wmac_set_tx_gain_buffalo(void);
+ void ath79_wmac_set_ext_lna_gpio(unsigned chain, int gpio);
++void ath79_wmac_set_led_pin(int gpio);
+ 
+ bool ar93xx_wmac_read_mac_address(u8 *dest);
+ 
+--- a/arch/mips/ath79/gpio.c
++++ b/arch/mips/ath79/gpio.c
+@@ -130,6 +130,30 @@ static int ar934x_gpio_direction_output(
+ 	return 0;
+ }
+ 
++int ath79_gpio_direction_select(unsigned gpio, bool oe)
++{
++	void __iomem *base = ath79_gpio_base;
++	unsigned long flags;
++	bool ieq_1 = (soc_is_ar934x() ||
++			soc_is_qca953x());
++
++	if (gpio >= ath79_gpio_count)
++		return -1;
++
++	spin_lock_irqsave(&ath79_gpio_lock, flags);
++
++	if ((ieq_1 && oe) || (!ieq_1 && !oe))
++		__raw_writel(__raw_readl(base + AR71XX_GPIO_REG_OE) & ~(1 << gpio),
++				base + AR71XX_GPIO_REG_OE);
++	else
++		__raw_writel(__raw_readl(base + AR71XX_GPIO_REG_OE) | (1 << gpio),
++				base + AR71XX_GPIO_REG_OE);
++
++	spin_unlock_irqrestore(&ath79_gpio_lock, flags);
++
++	return 0;
++}
++
+ static struct gpio_chip ath79_gpio_chip = {
+ 	.label			= "ath79",
+ 	.get			= ath79_gpio_get_value,
+--- /dev/null
++++ b/arch/mips/ath79/mach-ap147.c
+@@ -0,0 +1,125 @@
++/*
++ *  Atheros AP147 reference board support
++ *
++ *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
++ *  Copyright (C) 2015 Sven Eckelmann <sven@open-mesh.com>
++ *
++ *  This program is free software; you can redistribute it and/or modify it
++ *  under the terms of the GNU General Public License version 2 as published
++ *  by the Free Software Foundation.
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ar8216_platform.h>
++
++#include <asm/mach-ath79/ar71xx_regs.h>
++#include <asm/mach-ath79/ath79.h>
++
++#include "common.h"
++#include "dev-ap9x-pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-m25p80.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++#include "machtypes.h"
++#include "pci.h"
++
++#define AP147_GPIO_LED_WAN	4
++#define AP147_GPIO_LED_LAN1	16
++#define AP147_GPIO_LED_LAN2	15
++#define AP147_GPIO_LED_LAN3	14
++#define AP147_GPIO_LED_LAN4	11
++#define AP147_GPIO_LED_STATUS	13
++#define AP147_GPIO_LED_WLAN_2G	12
++
++#define AP147_GPIO_BTN_WPS	17
++
++#define AP147_KEYS_POLL_INTERVAL	20	/* msecs */
++#define AP147_KEYS_DEBOUNCE_INTERVAL	(3 * AP147_KEYS_POLL_INTERVAL)
++
++#define AP147_MAC0_OFFSET	0x1000
++
++static struct gpio_led ap147_leds_gpio[] __initdata = {
++	{
++		.name		= "ap147:green:status",
++		.gpio		= AP147_GPIO_LED_STATUS,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:wlan-2g",
++		.gpio		= AP147_GPIO_LED_WLAN_2G,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:lan1",
++		.gpio		= AP147_GPIO_LED_LAN1,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:lan2",
++		.gpio		= AP147_GPIO_LED_LAN2,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:lan3",
++		.gpio		= AP147_GPIO_LED_LAN3,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:lan4",
++		.gpio		= AP147_GPIO_LED_LAN4,
++		.active_low	= 1,
++	}, {
++		.name		= "ap147:green:wan",
++		.gpio		= AP147_GPIO_LED_WAN,
++		.active_low	= 1,
++	},
++};
++
++static struct gpio_keys_button ap147_gpio_keys[] __initdata = {
++	{
++		.desc		= "wps button",
++		.type		= EV_KEY,
++		.code		= KEY_WPS_BUTTON,
++		.debounce_interval = AP147_KEYS_DEBOUNCE_INTERVAL,
++		.gpio		= AP147_GPIO_BTN_WPS,
++		.active_low	= 1,
++	}
++};
++
++static void __init ap147_setup(void)
++{
++	u8 *art = (u8 *)KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(ap147_leds_gpio),
++				 ap147_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, AP147_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(ap147_gpio_keys),
++					ap147_gpio_keys);
++
++	ath79_register_usb();
++
++	ath79_register_pci();
++
++	ath79_register_wmac(art + AP147_MAC0_OFFSET, NULL);
++
++	ath79_setup_ar933x_phy4_switch(false, false);
++
++	ath79_register_mdio(0, 0x0);
++
++	/* LAN */
++	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_GMII;
++	ath79_eth1_data.duplex = DUPLEX_FULL;
++	ath79_switch_data.phy_poll_mask |= BIT(4);
++	ath79_init_mac(ath79_eth1_data.mac_addr, art, 0);
++	ath79_register_eth(1);
++
++	/* WAN */
++	ath79_switch_data.phy4_mii_en = 1;
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.speed = SPEED_100;
++	ath79_eth0_data.phy_mask = BIT(4);
++	ath79_init_mac(ath79_eth0_data.mac_addr, art, 1);
++	ath79_register_eth(0);
++}
++
++MIPS_MACHINE(ATH79_MACH_AP147_010, "AP147-010", "Atheros AP147-010 reference board", ap147_setup);
+--- /dev/null
++++ b/arch/mips/ath79/mach-ap152.c
+@@ -0,0 +1,140 @@
++
++/*
++ * Qualcomm Atheros AP152 reference board support
++ *
++ * Copyright (c) 2015 Qualcomm Atheros
++ * Copyright (c) 2012 Gabor Juhos <juhosg@openwrt.org>
++ *
++ * Permission to use, copy, modify, and/or distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ *
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ath9k_platform.h>
++#include <linux/ar8216_platform.h>
++#include <asm/mach-ath79/ar71xx_regs.h>
++
++#include "common.h"
++#include "dev-m25p80.h"
++#include "machtypes.h"
++#include "pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-spi.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++
++#define AP152_GPIO_LED_USB0		7
++#define AP152_GPIO_LED_USB1		8
++
++#define AP152_GPIO_BTN_RESET            2
++#define AP152_GPIO_BTN_WPS              1
++#define AP152_KEYS_POLL_INTERVAL        20     /* msecs */
++#define AP152_KEYS_DEBOUNCE_INTERVAL    (3 * AP152_KEYS_POLL_INTERVAL)
++
++#define AP152_MAC0_OFFSET               0
++#define AP152_WMAC_CALDATA_OFFSET       0x1000
++
++static struct gpio_led ap152_leds_gpio[] __initdata = {
++	{
++		.name		= "ap152:green:usb0",
++		.gpio		= AP152_GPIO_LED_USB0,
++		.active_low	= 1,
++	},
++	{
++		.name		= "ap152:green:usb1",
++		.gpio		= AP152_GPIO_LED_USB1,
++		.active_low	= 1,
++	},
++};
++
++static struct gpio_keys_button ap152_gpio_keys[] __initdata = {
++	{
++		.desc		= "WPS button",
++		.type		= EV_KEY,
++		.code		= KEY_WPS_BUTTON,
++		.debounce_interval = AP152_KEYS_DEBOUNCE_INTERVAL,
++		.gpio		= AP152_GPIO_BTN_WPS,
++		.active_low	= 1,
++	},
++	{
++		.desc		= "Reset button",
++		.type		= EV_KEY,
++		.code		= KEY_RESTART,
++		.debounce_interval = AP152_KEYS_DEBOUNCE_INTERVAL,
++		.gpio		= AP152_GPIO_BTN_RESET,
++		.active_low	= 1,
++	},
++};
++
++static struct ar8327_pad_cfg ap152_ar8337_pad0_cfg = {
++	.mode = AR8327_PAD_MAC_SGMII,
++	.sgmii_delay_en = true,
++};
++
++static struct ar8327_platform_data ap152_ar8337_data = {
++	.pad0_cfg = &ap152_ar8337_pad0_cfg,
++	.port0_cfg = {
++		.force_link = 1,
++		.speed = AR8327_PORT_SPEED_1000,
++		.duplex = 1,
++		.txpause = 1,
++		.rxpause = 1,
++	},
++};
++
++static struct mdio_board_info ap152_mdio0_info[] = {
++	{
++		.bus_id = "ag71xx-mdio.0",
++		.phy_addr = 0,
++		.platform_data = &ap152_ar8337_data,
++	},
++};
++
++static void __init ap152_setup(void)
++{
++	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(ap152_leds_gpio),
++				 ap152_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, AP152_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(ap152_gpio_keys),
++					ap152_gpio_keys);
++
++	ath79_register_usb();
++
++	platform_device_register(&ath79_mdio0_device);
++
++	mdiobus_register_board_info(ap152_mdio0_info,
++				    ARRAY_SIZE(ap152_mdio0_info));
++
++	ath79_register_wmac(art + AP152_WMAC_CALDATA_OFFSET, NULL);
++	ath79_register_pci();
++
++	ath79_init_mac(ath79_eth0_data.mac_addr, art + AP152_MAC0_OFFSET, 0);
++
++	/* GMAC0 is connected to an AR8337 switch */
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
++	ath79_eth0_data.speed = SPEED_1000;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.phy_mask = BIT(0);
++	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
++
++	ath79_register_eth(0);
++}
++
++MIPS_MACHINE(ATH79_MACH_AP152, "AP152", "Qualcomm Atheros AP152 reference board",
++	     ap152_setup);
+--- /dev/null
++++ b/arch/mips/ath79/mach-gb-cgw600.c
+@@ -0,0 +1,151 @@
++/*
++ *  Atheros AP147 reference board support
++ *
++ *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
++ *  Copyright (C) 2015 Sven Eckelmann <sven@open-mesh.com>
++ *
++ *  This program is free software; you can redistribute it and/or modify it
++ *  under the terms of the GNU General Public License version 2 as published
++ *  by the Free Software Foundation.
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ar8216_platform.h>
++
++#include <asm/mach-ath79/ar71xx_regs.h>
++#include <asm/mach-ath79/ath79.h>
++
++#include "common.h"
++#include "dev-ap9x-pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-m25p80.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++#include "machtypes.h"
++#include "pci.h"
++
++#define CGW600_GPIO_LED_STATUS	15 /*SYS_LED   1-on*/
++#define CGW600_GPIO_LED_WLAN	3         /*WLAN_2.4G_LED 1-on*/
++#define CGW600_GPIO_LED_LAN1	16        /*LAN1_LED  0-on*/
++#define CGW600_GPIO_LED_LAN2	17	     /*LAN2_LED  0-on*/
++#define CGW600_GPIO_LED_LAN3	14        /*LAN3_LED  0-on*/
++#define CGW600_GPIO_LED_LAN4	12        /*LAN4_LED  0-on*/
++#define CGW600_GPIO_LED_WAN	11        /*WAN_LED   0-on*/
++
++#define CGW600_GPIO_BTN_RST	13   /*SW_RST*/ 
++
++#define CGW600_KEYS_POLL_INTERVAL	20	/* msecs */
++#define CGW600_KEYS_DEBOUNCE_INTERVAL	(3 * CGW600_KEYS_POLL_INTERVAL)
++
++#define CGW600_MAC0_OFFSET	0x1000
++
++static struct gpio_led cgw600_leds_gpio[] __initdata = {
++	{
++		.name		= "cgw600:green:status",
++		.gpio		= CGW600_GPIO_LED_STATUS,
++		.active_low	= 0,
++	},{
++		.name		= "cgw600:green:wlan",
++		.gpio		= CGW600_GPIO_LED_WLAN,
++		.active_low	= 0,
++	},  {
++		.name		= "cgw600:green:lan1",
++		.gpio		= CGW600_GPIO_LED_LAN1,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw600:green:lan2",
++		.gpio		= CGW600_GPIO_LED_LAN2,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw600:green:lan3",
++		.gpio		= CGW600_GPIO_LED_LAN3,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw600:green:lan4",
++		.gpio		= CGW600_GPIO_LED_LAN4,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw600:green:wan",
++		.gpio		= CGW600_GPIO_LED_WAN,
++		.active_low	= 1,
++	},
++};
++
++static struct gpio_keys_button cgw600_gpio_keys[] __initdata = {
++	{
++		.desc		= "Reset button",
++		.type		= EV_KEY,
++		.code		= KEY_RESTART,
++		.debounce_interval =CGW600_KEYS_DEBOUNCE_INTERVAL,
++		.gpio		= CGW600_GPIO_BTN_RST,
++		.active_low	= 0,
++	}
++};
++
++
++static void __init cgw600_gpio_led_setup(void)
++{
++	ath79_gpio_direction_select(CGW600_GPIO_LED_WAN, true);
++	ath79_gpio_direction_select(CGW600_GPIO_LED_LAN1, true);
++	ath79_gpio_direction_select(CGW600_GPIO_LED_LAN2, true);
++	ath79_gpio_direction_select(CGW600_GPIO_LED_LAN3, true);
++	ath79_gpio_direction_select(CGW600_GPIO_LED_LAN4, true);
++
++	ath79_gpio_output_select(CGW600_GPIO_LED_WAN,
++			QCA953X_GPIO_OUT_MUX_LED_LINK5);
++	ath79_gpio_output_select(CGW600_GPIO_LED_LAN1,
++			QCA953X_GPIO_OUT_MUX_LED_LINK4);
++	ath79_gpio_output_select(CGW600_GPIO_LED_LAN2,
++			QCA953X_GPIO_OUT_MUX_LED_LINK3);
++	ath79_gpio_output_select(CGW600_GPIO_LED_LAN3,
++			QCA953X_GPIO_OUT_MUX_LED_LINK2);
++	ath79_gpio_output_select(CGW600_GPIO_LED_LAN4,
++			QCA953X_GPIO_OUT_MUX_LED_LINK1);
++
++}
++
++
++static void __init gb_cgw600_setup(void)
++{
++	u8 *art = (u8 *)KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++
++	cgw600_gpio_led_setup();
++	
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(cgw600_leds_gpio),
++				 cgw600_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, CGW600_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(cgw600_gpio_keys),
++					cgw600_gpio_keys);
++
++	ath79_register_usb();
++
++	ath79_register_pci();
++
++	ath79_register_wmac(art + CGW600_MAC0_OFFSET, NULL);
++
++	ath79_setup_ar933x_phy4_switch(false, false);
++
++	ath79_register_mdio(0, 0x0);
++
++	/* LAN */
++	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_GMII;
++	ath79_eth1_data.duplex = DUPLEX_FULL;
++	ath79_switch_data.phy_poll_mask |= BIT(4);
++	ath79_init_mac(ath79_eth1_data.mac_addr, art, 0);
++	ath79_register_eth(1);
++
++	/* WAN */
++	ath79_switch_data.phy4_mii_en = 1;
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.speed = SPEED_100;
++	ath79_eth0_data.phy_mask = BIT(4);
++	ath79_init_mac(ath79_eth0_data.mac_addr, art, 1);
++	ath79_register_eth(0);
++}
++
++MIPS_MACHINE(ATH79_MACH_GB_CGW600, "GB-CGW600", "GBCOM CGW600 board", gb_cgw600_setup);
+--- /dev/null
++++ b/arch/mips/ath79/mach-gb-cgw800.c
+@@ -0,0 +1,155 @@
++/*
++ *  Atheros AP147 reference board support
++ *
++ *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
++ *  Copyright (C) 2015 Sven Eckelmann <sven@open-mesh.com>
++ *
++ *  This program is free software; you can redistribute it and/or modify it
++ *  under the terms of the GNU General Public License version 2 as published
++ *  by the Free Software Foundation.
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ar8216_platform.h>
++
++#include <asm/mach-ath79/ar71xx_regs.h>
++#include <asm/mach-ath79/ath79.h>
++
++#include "common.h"
++#include "dev-ap9x-pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-m25p80.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++#include "machtypes.h"
++#include "pci.h"
++
++#define CGW800_GPIO_LED_STATUS	15 /*SYS_LED   1-on*/
++#define CGW800_GPIO_LED_WLAN	3         /*WLAN_2.4G_LED 1-on*/
++#define CGW800_GPIO_LED_LAN1	16        /*LAN1_LED  0-on*/
++#define CGW800_GPIO_LED_LAN2	17	     /*LAN2_LED  0-on*/
++#define CGW800_GPIO_LED_LAN3	14        /*LAN3_LED  0-on*/
++#define CGW800_GPIO_LED_LAN4	12        /*LAN4_LED  0-on*/
++#define CGW800_GPIO_LED_WAN	11        /*WAN_LED   0-on*/
++
++
++
++
++#define CGW800_GPIO_BTN_RST	13   /*SW_RST*/
++
++#define CGW800_KEYS_POLL_INTERVAL	20	/* msecs */
++#define CGW800_KEYS_DEBOUNCE_INTERVAL	(3 * CGW800_KEYS_POLL_INTERVAL)
++
++#define CGW800_MAC0_OFFSET	0x1000
++
++static struct gpio_led cgw800_leds_gpio[] __initdata = {
++	{
++		.name		= "cgw800:green:status",
++		.gpio		= CGW800_GPIO_LED_STATUS,
++		.active_low	= 0,
++	}, {
++		.name		= "cgw800:green:wlan",
++		.gpio		= CGW800_GPIO_LED_WLAN,
++		.active_low	= 0,
++	},{
++		.name		= "cgw800:green:lan1",
++		.gpio		= CGW800_GPIO_LED_LAN1,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw800:green:lan2",
++		.gpio		= CGW800_GPIO_LED_LAN2,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw800:green:lan3",
++		.gpio		= CGW800_GPIO_LED_LAN3,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw800:green:lan4",
++		.gpio		= CGW800_GPIO_LED_LAN4,
++		.active_low	= 1,
++	}, {
++		.name		= "cgw800:green:wan",
++		.gpio		= CGW800_GPIO_LED_WAN,
++		.active_low	= 1,
++	},
++};
++
++static struct gpio_keys_button cgw800_gpio_keys[] __initdata = {
++	{
++		.desc		= "Reset button",
++		.type		= EV_KEY,
++		.code		= KEY_RESTART,
++		.debounce_interval =CGW800_KEYS_DEBOUNCE_INTERVAL,
++		.gpio		= CGW800_GPIO_BTN_RST,
++		.active_low	= 0,
++	}
++};
++
++
++static void __init cgw800_gpio_led_setup(void)
++{
++	ath79_gpio_direction_select(CGW800_GPIO_LED_WAN, true);
++	ath79_gpio_direction_select(CGW800_GPIO_LED_LAN1, true);
++	ath79_gpio_direction_select(CGW800_GPIO_LED_LAN2, true);
++	ath79_gpio_direction_select(CGW800_GPIO_LED_LAN3, true);
++	ath79_gpio_direction_select(CGW800_GPIO_LED_LAN4, true);
++
++	ath79_gpio_output_select(CGW800_GPIO_LED_WAN,
++			QCA953X_GPIO_OUT_MUX_LED_LINK5);
++	ath79_gpio_output_select(CGW800_GPIO_LED_LAN1,
++			QCA953X_GPIO_OUT_MUX_LED_LINK4);
++	ath79_gpio_output_select(CGW800_GPIO_LED_LAN2,
++			QCA953X_GPIO_OUT_MUX_LED_LINK3);
++	ath79_gpio_output_select(CGW800_GPIO_LED_LAN3,
++			QCA953X_GPIO_OUT_MUX_LED_LINK2);
++	ath79_gpio_output_select(CGW800_GPIO_LED_LAN4,
++			QCA953X_GPIO_OUT_MUX_LED_LINK1);
++
++}
++
++
++static void __init gb_cgw800_setup(void)
++{
++	u8 *art = (u8 *)KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++
++	cgw800_gpio_led_setup();
++	
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(cgw800_leds_gpio),
++				 cgw800_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, CGW800_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(cgw800_gpio_keys),
++					cgw800_gpio_keys);
++
++	ath79_register_usb();
++
++	ath79_register_pci();
++
++	ath79_register_wmac(art + CGW800_MAC0_OFFSET, NULL);
++
++	ath79_setup_ar933x_phy4_switch(false, false);
++
++	ath79_register_mdio(0, 0x0);
++
++	/* LAN */
++	ath79_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_GMII;
++	ath79_eth1_data.duplex = DUPLEX_FULL;
++	ath79_switch_data.phy_poll_mask |= BIT(4);
++	ath79_init_mac(ath79_eth1_data.mac_addr, art, 0);
++	ath79_register_eth(1);
++
++	/* WAN */
++	ath79_switch_data.phy4_mii_en = 1;
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.speed = SPEED_100;
++	ath79_eth0_data.phy_mask = BIT(4);
++	ath79_init_mac(ath79_eth0_data.mac_addr, art, 1);
++	ath79_register_eth(0);
++}
++
++MIPS_MACHINE(ATH79_MACH_GB_CGW800, "GB-CGW800", "GBCOM CGW800 board", gb_cgw800_setup);
++
+--- /dev/null
++++ b/arch/mips/ath79/mach-gb-oa5025.c
+@@ -0,0 +1,137 @@
++
++/*
++ * Qualcomm Atheros AP152 reference board support
++ *
++ * Copyright (c) 2015 Qualcomm Atheros
++ * Copyright (c) 2012 Gabor Juhos <juhosg@openwrt.org>
++ *
++ * Permission to use, copy, modify, and/or distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ *
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ath9k_platform.h>
++#include <linux/ar8216_platform.h>
++#include <asm/mach-ath79/ar71xx_regs.h>
++
++#include "common.h"
++#include "dev-m25p80.h"
++#include "machtypes.h"
++#include "pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-spi.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++
++#define OA5025_GPIO_LED_WLAN             10
++#define OA5025_GPIO_LED_RUN              11
++
++#define OA5025_GPIO_BTN_RESET            5
++
++#define OA5025_KEYS_POLL_INTERVAL        20     /* msecs */
++#define OA5025_KEYS_DEBOUNCE_INTERVAL    (3 * OA5025_KEYS_POLL_INTERVAL)
++
++#define OA5025_KEYS_POLL_INTERVAL        20     /* msecs */
++#define OA5025_KEYS_DEBOUNCE_INTERVAL    (3 * OA5025_KEYS_POLL_INTERVAL)
++
++
++#define OA5025_MAC0_OFFSET               0
++#define OA5025_WMAC_CALDATA_OFFSET       0x1000
++
++
++static struct gpio_led oa5025_leds_gpio[] __initdata = {
++	{
++		.name		= "oa5025:green:status",
++		.gpio		= OA5025_GPIO_LED_RUN,
++		.active_low	= 0,
++	},
++	{
++		.name		= "oa5025:green:wlan",
++		.gpio		= OA5025_GPIO_LED_WLAN,
++		.active_low	= 0,
++	},
++};
++
++static struct gpio_keys_button oa5025_gpio_keys[] __initdata = {
++        {
++                .desc           = "Reset button",
++                .type           = EV_KEY,
++                .code           = KEY_RESTART,
++                .debounce_interval = OA5025_KEYS_DEBOUNCE_INTERVAL,
++                .gpio           = OA5025_GPIO_BTN_RESET,
++                .active_low     = 1,
++        },
++};
++
++
++static struct ar8327_pad_cfg oa5025_ar8337_pad0_cfg = {
++	.mode = AR8327_PAD_MAC_SGMII,
++	.sgmii_delay_en = true,
++};
++
++static struct ar8327_platform_data oa5025_ar8337_data = {
++	.pad0_cfg = &oa5025_ar8337_pad0_cfg,
++	.port0_cfg = {
++		.force_link = 1,
++		.speed = AR8327_PORT_SPEED_1000,
++		.duplex = 1,
++		.txpause = 1,
++		.rxpause = 1,
++	},
++};
++
++static struct mdio_board_info oa5025_mdio0_info[] = {
++	{
++		.bus_id = "ag71xx-mdio.0",
++		.phy_addr = 0,
++		.platform_data = &oa5025_ar8337_data,
++	},
++};
++
++static void __init oa5025_setup(void)
++{
++	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(oa5025_leds_gpio),
++				 oa5025_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, OA5025_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(oa5025_gpio_keys),
++					oa5025_gpio_keys);
++
++	ath79_register_usb();
++
++	platform_device_register(&ath79_mdio0_device);
++
++	mdiobus_register_board_info(oa5025_mdio0_info,
++				    ARRAY_SIZE(oa5025_mdio0_info));
++
++	ath79_register_wmac(art + OA5025_WMAC_CALDATA_OFFSET, NULL);
++	ath79_register_pci();
++
++	ath79_init_mac(ath79_eth0_data.mac_addr, art + OA5025_MAC0_OFFSET, 0);
++
++	/* GMAC0 is connected to an AR8337 switch */
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
++	ath79_eth0_data.speed = SPEED_1000;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.phy_mask = BIT(0);
++	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
++
++	ath79_register_eth(0);
++}
++MIPS_MACHINE(ATH79_MACH_GB_OA5025, "GB-OA5025", "GBCOM OA5025 board",
++	     oa5025_setup);
+--- /dev/null
++++ b/arch/mips/ath79/mach-gb-ta2025ac.c
+@@ -0,0 +1,139 @@
++
++/*
++ * Qualcomm Atheros AP152 reference board support
++ *
++ * Copyright (c) 2015 Qualcomm Atheros
++ * Copyright (c) 2012 Gabor Juhos <juhosg@openwrt.org>
++ *
++ * Permission to use, copy, modify, and/or distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ *
++ */
++
++#include <linux/platform_device.h>
++#include <linux/ath9k_platform.h>
++#include <linux/ar8216_platform.h>
++#include <asm/mach-ath79/ar71xx_regs.h>
++
++#include "common.h"
++#include "dev-m25p80.h"
++#include "machtypes.h"
++#include "pci.h"
++#include "dev-eth.h"
++#include "dev-gpio-buttons.h"
++#include "dev-leds-gpio.h"
++#include "dev-spi.h"
++#include "dev-usb.h"
++#include "dev-wmac.h"
++
++
++#define TA2025AC_GPIO_LED_WLAN             10
++#define TA2025AC_GPIO_LED_RUN              11
++
++#define TA2025AC_GPIO_BTN_RESET            5
++
++#define TA2025AC_KEYS_POLL_INTERVAL        20     /* msecs */
++#define TA2025AC_KEYS_DEBOUNCE_INTERVAL    (3 * TA2025AC_KEYS_POLL_INTERVAL)
++
++#define TA2025AC_KEYS_POLL_INTERVAL        20     /* msecs */
++#define TA2025AC_KEYS_DEBOUNCE_INTERVAL    (3 * TA2025AC_KEYS_POLL_INTERVAL)
++
++
++#define TA2025AC_MAC0_OFFSET               0
++#define TA2025AC_WMAC_CALDATA_OFFSET       0x1000
++
++
++static struct gpio_led ta2025ac_leds_gpio[] __initdata = {
++	{
++		.name		= "ta2025ac:green:status",
++		.gpio		= TA2025AC_GPIO_LED_RUN,
++		.active_low	= 0,
++	},
++	{
++		.name		= "ta2025ac:green:wlan",
++		.gpio		= TA2025AC_GPIO_LED_WLAN,
++		.active_low	= 0,
++	},
++};
++
++static struct gpio_keys_button ta2025ac_gpio_keys[] __initdata = {
++        {
++                .desc           = "Reset button",
++                .type           = EV_KEY,
++                .code           = KEY_RESTART,
++                .debounce_interval = TA2025AC_KEYS_DEBOUNCE_INTERVAL,
++                .gpio           = TA2025AC_GPIO_BTN_RESET,
++                .active_low     = 1,
++        },
++};
++
++
++static struct ar8327_pad_cfg ta2025ac_ar8337_pad0_cfg = {
++	.mode = AR8327_PAD_MAC_SGMII,
++	.sgmii_delay_en = true,
++};
++
++static struct ar8327_platform_data ta2025ac_ar8337_data = {
++	.pad0_cfg = &ta2025ac_ar8337_pad0_cfg,
++	.port0_cfg = {
++		.force_link = 1,
++		.speed = AR8327_PORT_SPEED_1000,
++		.duplex = 1,
++		.txpause = 1,
++		.rxpause = 1,
++	},
++};
++
++static struct mdio_board_info ta2025ac_mdio0_info[] = {
++	{
++		.bus_id = "ag71xx-mdio.0",
++		.phy_addr = 0,
++		.platform_data = &ta2025ac_ar8337_data,
++	},
++};
++
++static void __init ta2025ac_setup(void)
++{
++	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
++
++	ath79_register_m25p80(NULL);
++
++	ath79_register_leds_gpio(-1, ARRAY_SIZE(ta2025ac_leds_gpio),
++				 ta2025ac_leds_gpio);
++	ath79_register_gpio_keys_polled(-1, TA2025AC_KEYS_POLL_INTERVAL,
++					ARRAY_SIZE(ta2025ac_gpio_keys),
++					ta2025ac_gpio_keys);
++
++	ath79_register_usb();
++
++	platform_device_register(&ath79_mdio0_device);
++
++	mdiobus_register_board_info(ta2025ac_mdio0_info,
++				    ARRAY_SIZE(ta2025ac_mdio0_info));
++
++	ath79_register_wmac(art + TA2025AC_WMAC_CALDATA_OFFSET, NULL);
++	ath79_register_pci();
++
++	ath79_init_mac(ath79_eth0_data.mac_addr, art + TA2025AC_MAC0_OFFSET, 0);
++
++	/* GMAC0 is connected to an AR8337 switch */
++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_SGMII;
++	ath79_eth0_data.speed = SPEED_1000;
++	ath79_eth0_data.duplex = DUPLEX_FULL;
++	ath79_eth0_data.phy_mask = BIT(0);
++	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
++
++	ath79_register_eth(0);
++}
++
++MIPS_MACHINE(ATH79_MACH_GB_TA2025AC, "GB-TA2025AC", "GBCOM TA2025AC board",
++	     ta2025ac_setup);
+--- a/arch/mips/ath79/pci.c
++++ b/arch/mips/ath79/pci.c
+@@ -53,6 +53,15 @@ static const struct ath79_pci_irq ar724x
+ 	}
+ };
+ 
++static const struct ath79_pci_irq qca953x_pci_irq_map[] __initconst = {
++	{
++		.bus	= 0,
++		.slot	= 0,
++		.pin	= 1,
++		.irq	= ATH79_PCI_IRQ(0),
++	},
++};
++
+ static const struct ath79_pci_irq qca955x_pci_irq_map[] __initconst = {
+ 	{
+ 		.bus	= 0,
+@@ -98,6 +107,9 @@ int __init pcibios_map_irq(const struct 
+ 			   soc_is_ar9344()) {
+ 			ath79_pci_irq_map = ar724x_pci_irq_map;
+ 			ath79_pci_nr_irqs = ARRAY_SIZE(ar724x_pci_irq_map);
++		} else if (soc_is_qca953x()) {
++			ath79_pci_irq_map = qca953x_pci_irq_map;
++			ath79_pci_nr_irqs = ARRAY_SIZE(qca953x_pci_irq_map);
+ 		} else if (soc_is_qca955x()) {
+ 			ath79_pci_irq_map = qca955x_pci_irq_map;
+ 			ath79_pci_nr_irqs = ARRAY_SIZE(qca955x_pci_irq_map);
+@@ -303,6 +315,15 @@ int __init ath79_register_pci(void)
+ 						 AR724X_PCI_MEM_SIZE,
+ 						 0,
+ 						 ATH79_IP2_IRQ(0));
++	} else if (soc_is_qca9533()) {
++		pdev = ath79_register_pci_ar724x(0,
++						 QCA953X_PCI_CFG_BASE0,
++						 QCA953X_PCI_CTRL_BASE0,
++						 QCA953X_PCI_CRP_BASE0,
++						 QCA953X_PCI_MEM_BASE0,
++						 QCA953X_PCI_MEM_SIZE,
++						 0,
++						 ATH79_IP2_IRQ(0));
+ 	} else if (soc_is_qca9558()) {
+ 		pdev = ath79_register_pci_ar724x(0,
+ 						 QCA955X_PCI_CFG_BASE0,
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+@@ -36,6 +36,9 @@
+ #define AT803X_INER				0x0012
+ #define AT803X_INER_INIT			0xec00
+ #define AT803X_INSR				0x0013
++#define AT803X_REG_CHIP_CONFIG			0x1f
++#define AT803X_BT_BX_REG_SEL			0x8000
++#define AT803X_SGMII_ANEG_EN			0x1000
+ 
+ #define AT803X_PCS_SMART_EEE_CTRL3			0x805D
+ #define AT803X_SMART_EEE_CTRL3_LPI_TX_DELAY_SEL_MASK	0x3
+@@ -267,6 +270,27 @@ static int at803x_config_init(struct phy
+ {
+ 	struct at803x_platform_data *pdata;
+ 	int ret;
++	u32 v;
++
++	if (phydev->drv->phy_id == ATH8031_PHY_ID &&
++		phydev->interface == PHY_INTERFACE_MODE_SGMII)
++	{
++		v = phy_read(phydev, AT803X_REG_CHIP_CONFIG);
++		/* select SGMII/fiber page */
++		ret = phy_write(phydev, AT803X_REG_CHIP_CONFIG,
++						v & ~AT803X_BT_BX_REG_SEL);
++		if (ret)
++			return ret;
++		/* enable SGMII autonegotiation */
++		ret = phy_write(phydev, MII_BMCR, AT803X_SGMII_ANEG_EN);
++		if (ret)
++			return ret;
++		/* select copper page */
++		ret = phy_write(phydev, AT803X_REG_CHIP_CONFIG,
++						v | AT803X_BT_BX_REG_SEL);
++		if (ret)
++			return ret;
++	}
+ 
+ 	ret = genphy_config_init(phydev);
+ 	if (ret < 0)

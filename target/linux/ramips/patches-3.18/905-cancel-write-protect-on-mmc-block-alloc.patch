@@ -1,0 +1,25 @@
+diff -Naur a/drivers/mmc/card/block.c b/drivers/mmc/card/block.c
+--- a/drivers/mmc/card/block.c	2015-10-29 10:49:46.000000000 +0800
++++ b/drivers/mmc/card/block.c	2017-01-04 10:42:56.821173021 +0800
+@@ -2126,7 +2126,10 @@
+ 	 * Set the read-only status based on the supported commands
+ 	 * and the write protect switch.
+ 	 */
+-	md->read_only = mmc_blk_readonly(card);
++	//md->read_only = mmc_blk_readonly(card);
++
++    // Forced to write. 20170104 zhangzf
++	md->read_only = 0;
+ 
+ 	md->disk = alloc_disk(perdev_minors);
+ 	if (md->disk == NULL) {
+@@ -2151,7 +2154,8 @@
+ 	md->disk->private_data = md;
+ 	md->disk->queue = md->queue.queue;
+ 	md->disk->driverfs_dev = parent;
+-	set_disk_ro(md->disk, md->read_only || default_ro);
++    // Forced to write. 20170104 zhangzf
++	//set_disk_ro(md->disk, md->read_only || default_ro);
+ 	if (area_type & (MMC_BLK_DATA_AREA_RPMB | MMC_BLK_DATA_AREA_BOOT))
+ 		md->disk->flags |= GENHD_FL_NO_PART_SCAN;
+ 

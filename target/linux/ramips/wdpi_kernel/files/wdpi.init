@@ -1,0 +1,41 @@
+#!/bin/sh /etc/rc.common
+
+START=97
+
+SERVICE_USE_PID=1
+SERVICE_WRITE_PID=1
+SERVICE_DAEMONIZE=1
+
+WDPI=/usr/sbin/wdpi_kernel
+
+WDPI_wan_if=eth0.2
+WDPI_br_if=br_lan
+WDPI_debug=0
+WDPI_sample=0
+
+prepare_wdpi_conf(){
+	local cfg=$1
+        config_get WDPI_wan_if "$cfg" "wan_interface" "eth0.2"
+        config_get WDPI_br_if "$cfg" "br_interface" "br_lan"
+        config_get WDPI_debug "$cfg" "wdpi_debug" "0"
+        config_get WDPI_sample "$cfg" "wdpi_sample" "30"
+}
+
+start() {
+    local wan_ifname=`uci show network.wan.ifname | cut -d'=' -f 2|sed -e "s/'//g"`
+    local eth_str=`ifconfig | grep $wan_ifname`
+
+	config_load wdpi_kernel
+	config_foreach prepare_wdpi_conf wdpi_kernel
+	
+	if [ ! -n "$eth_str" ]; then
+		wan_ifname=$WDPI_wan_if
+		echo "config error: wan_ifname is not exist, replace with $wan_ifname" >/dev/ttyS0
+	fi	
+	
+	insmod $WDPI debug=$WDPI_debug samples=$WDPI_sample br_if=$WDPI_br_if wan_if=$wan_ifname
+}
+stop() {
+	rmmod $WDPI
+}
+		

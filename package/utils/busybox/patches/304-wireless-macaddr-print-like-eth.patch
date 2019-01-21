@@ -1,0 +1,16 @@
+Index: busybox-1.25.1/networking/interface.c
+===================================================================
+--- busybox-1.25.1.orig/networking/interface.c
++++ busybox-1.25.1/networking/interface.c
+@@ -613,7 +613,10 @@ static int if_fetch(struct interface *if
+ 	memset(ife->hwaddr, 0, 32);
+ 	if (ioctl(skfd, SIOCGIFHWADDR, &ifr) >= 0)
+ 		memcpy(ife->hwaddr, ifr.ifr_hwaddr.sa_data, 8);
+-
++/*<Begin:caizhibang modify for printing standrd macaddr with wifi device*/
++	if(ifr.ifr_hwaddr.sa_family == ARPHRD_IEEE80211)
++		ifr.ifr_hwaddr.sa_family = ARPHRD_ETHER;
++/*End:caizhibang modify for printing standrd macaddr with wifi device>*/
+ 	ife->type = ifr.ifr_hwaddr.sa_family;
+ 
+ 	strncpy_IFNAMSIZ(ifr.ifr_name, ifname);

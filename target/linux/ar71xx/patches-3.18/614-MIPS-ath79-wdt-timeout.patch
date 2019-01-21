@@ -1,0 +1,54 @@
+--- a/drivers/watchdog/ath79_wdt.c	2014-06-23 23:35:55.747047338 -0400
++++ b/drivers/watchdog/ath79_wdt.c	2014-06-23 21:29:47.793775345 -0400
+@@ -38,6 +38,12 @@
+ 
+ #define DRIVER_NAME	"ath79-wdt"
+ 
++#ifdef CONFIG_ATH79_MACH_COMFAST
++void ath79_external_wdt_trigger(void);
++void ath79_external_wdt_set_timeout(int timeout);
++void ath79_external_wdt_disable(void);
++#endif
++
+ #define WDT_TIMEOUT	15	/* seconds */
+ 
+ #define WDOG_REG_CTRL		0x00
+@@ -86,6 +92,9 @@
+ 	ath79_wdt_wr(WDOG_REG_TIMER, wdt_freq * timeout);
+ 	/* flush write */
+ 	ath79_wdt_rr(WDOG_REG_TIMER);
++#ifdef CONFIG_ATH79_MACH_COMFAST
++	ath79_external_wdt_trigger();
++#endif
+ }
+ 
+ static inline void ath79_wdt_enable(void)
+@@ -101,6 +110,9 @@
+ 	ath79_wdt_wr(WDOG_REG_CTRL, WDOG_CTRL_ACTION_NONE);
+ 	/* flush write */
+ 	ath79_wdt_rr(WDOG_REG_CTRL);
++#ifdef CONFIG_ATH79_MACH_COMFAST
++	ath79_external_wdt_disable();
++#endif
+ }
+ 
+ static int ath79_wdt_set_timeout(int val)
+@@ -108,11 +120,17 @@
+ 	if (val < 1)
+ 		return -EINVAL;
+ 
+-	if (val > max_timeout)
++	if (val > max_timeout) {
++		printk(KERN_ERR "Watchdog timeout exceeds, using %d\n", max_timeout);
+ 		timeout = max_timeout;
++	}
+ 	else
+ 		timeout = val;
+ 
++#ifdef CONFIG_ATH79_MACH_COMFAST
++	ath79_external_wdt_set_timeout(timeout);
++#endif
++
+ 	ath79_wdt_keepalive();
+ 
+ 	return 0;
