@@ -1,0 +1,23 @@
+--- a/glib/glib/gdate.c
++++ b/glib/glib/gdate.c
+@@ -2439,6 +2439,9 @@ win32_strftime_helper (const GDate     *d,
+  *
+  * Returns: number of characters written to the buffer, or 0 the buffer was too small
+  */
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wformat-nonliteral"
++
+ gsize     
+ g_date_strftime (gchar       *s, 
+                  gsize        slen, 
+@@ -2549,3 +2552,5 @@ g_date_strftime (gchar       *s,
+   return retval;
+ #endif
+ }
++
++#pragma GCC diagnostic pop
+--------------------- 
+作者：帅得不敢出门 
+来源：CSDN 
+原文：https://blog.csdn.net/zmlovelx/article/details/81664043 
+版权声明：本文为博主原创文章，转载请附上博文链接！
